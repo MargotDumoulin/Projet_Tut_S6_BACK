@@ -2,7 +2,7 @@ import express from "express";
 import { Client }  from "@elastic/elasticsearch";
 
 const app = express();
-const port = 8080; // Server's port
+const port = 5000; // Server's port
 
 const client = new Client({ node: 'http://localhost:9200' }); // ElasticSearch client
 
