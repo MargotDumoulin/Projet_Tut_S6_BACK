@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "allowUnreachableCode": false,
+        "noFallthroughCasesInSwitch": true,
+        "allowSyntheticDefaultImports": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["es6", "es2015", "es2017", "dom"],
+        "module": "commonjs",
+        "outDir": "js",
+        "rootDir": "src",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": false,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "strict": true,
+        "pretty": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "esnext",
+        "resolveJsonModule": true
+    },
+    "exclude": [
+        "node_modules",
+        "build",
+        "scripts",
+        "acceptance-tests",
+        "webpack",
+        "jest",
+        "razzle.config.js",
+        "src/**/*.json",
+        "nightwatch.conf.js",
+        "tests",
+        "src/app/**/tests"
+    ],
+    "include": [
+        "src/**/*.ts",
+        "src/*.ts"
+    ],
+    "types": ["typePatches", "node", "webpack-env"]
+}
+    
