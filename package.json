@@ -1,4 +1,5 @@
 {
+  "main": "src/index.ts",
   "name": "projet-tut-api",
   "version": "0.0.1",
   "description": "Projet Tutoré S6 API",
