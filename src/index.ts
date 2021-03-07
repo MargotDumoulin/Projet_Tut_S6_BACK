@@ -40,5 +40,26 @@ const getGamesByName = (req: any, res: any) => {
     });
 };
 
+const getGameById = (req: any, res: any) => {
+    const id: number = req.params.id;
+
+    client.search({
+        index: 'project_s6_steam',
+        body: {
+            query: {
+                match: {
+                    id: id          
+                }
+            }
+        }
+    }).then(function(response) {
+        const result: {} = response.body.hits.hits[0]._source;
+        res.status(200).send(result);
+    }).catch(function (error) {
+        res.status(404).send("Not found");
+    });
+}
+
 // --- ROUTES ----
 app.get('/games', getGamesByName);
+app.get('/game/:id', getGameById)
