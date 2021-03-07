@@ -1,0 +1,20 @@
+export type IncompleteGameInfo = {
+    id: number,
+    name: string,
+    release_date: Date, 
+    english: boolean,
+    developer: string[],
+    publisher: string[],
+    platforms: string[],
+    required_age: number, 
+    categories: string[],
+    genres: string[],
+    steamspy_tags: string[],
+    achievements: number,
+    positive_ratings: number,
+    negative_ratings: number,
+    average_playtime: number,
+    median_playtime: number,
+    owners: string,
+    price: number
+}
