@@ -1,3 +1,4 @@
+import { IncompleteGameInfo, CompleteGameInfo } from './types';
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
 
@@ -30,10 +31,12 @@ const getGamesByName = (req: any, res: any) => {
         }
     }).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: {}[] = [];
+        let formattedResults: IncompleteGameInfo[] = [];
+
         results.forEach((res: any) => {
             formattedResults.push(res._source);
         })
+
         res.status(200).send(formattedResults);
     }).catch(function (error) {
         res.status(404).send("Not found");
@@ -44,7 +47,12 @@ const getGameById = (req: any, res: any) => {
     const id: number = req.params.id;
 
     client.search({
-        index: 'project_s6_steam',
+        index: [
+            'project_s6_steam', 
+            'project_s6_steam_description_data',
+            'project_s6_steam_requirements_data',
+            'project_s6_steam_media_data'
+        ],
         body: {
             query: {
                 match: {
@@ -53,9 +61,16 @@ const getGameById = (req: any, res: any) => {
             }
         }
     }).then(function(response) {
-        const result: {} = response.body.hits.hits[0]._source;
-        res.status(200).send(result);
+        const results: [] = response.body.hits.hits;
+        const formattedResult: CompleteGameInfo = {};
+        
+        results.forEach((res: any) => {
+            Object.assign(formattedResult, res._source);
+        });
+
+        res.status(200).send(formattedResult);
     }).catch(function (error) {
+        console.log(error);
         res.status(404).send("Not found");
     });
 }
