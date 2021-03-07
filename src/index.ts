@@ -1,5 +1,6 @@
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
+import { IncompleteGameInfo } from "./types";
 
 const app = express();
 const port = 5000; // Server's port
@@ -30,7 +31,8 @@ const getGamesByName = (req: any, res: any) => {
         }
     }).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: {}[] = [];
+        let formattedResults: IncompleteGameInfo[] = [];
+
         results.forEach((res: any) => {
             formattedResults.push(res._source);
         })
