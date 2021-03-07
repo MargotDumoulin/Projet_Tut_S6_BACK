@@ -12,8 +12,8 @@ app.listen( port, () => {
 });
 
 const getGamesByName = (req: any, res: any) => {
-    const page = req.query.page > 0 ? req.query.page : '1';
-    const name = req.query.name ? req.query.name : "";
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    const name: string = req.query.name ? req.query.name : "";
 
     client.search({
         index: 'project_s6_steam',
@@ -29,7 +29,12 @@ const getGamesByName = (req: any, res: any) => {
             }
         }
     }).then(function(response) {
-        res.status(200).send(response.body.hits.hits);
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: {}[] = [];
+        results.forEach((res: any) => {
+            formattedResults.push(res._source);
+        })
+        res.status(200).send(formattedResults);
     }).catch(function (error) {
         res.status(404).send("Not found");
     });
