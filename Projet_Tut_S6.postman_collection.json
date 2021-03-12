@@ -138,7 +138,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"query\": {\n    \"wildcard\": {\n      \"name\": {\n        \"value\": \"Half*\",\n        \"boost\": 1.0\n      }\n    }\n  }\n}\n\n{\n  \"from\": 5,\n  \"size\": 20,\n  \"query\": {\n    \"wildcard\": {\n      \"name\": {\n        \"value\": \"Half*\",\n        \"boost\": 1.0\n      }\n    }\n  }\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -352,14 +352,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/game/380",
+							"raw": "http://{{localhost}}/game/10",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
 								"game",
-								"380"
+								"10"
 							]
 						}
 					},
