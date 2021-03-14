@@ -22,13 +22,15 @@ const getGamesByName = (req: any, res: any) => {
             "from": ((page * 10) - 10),
             "size": 10,
             query: {
-                wildcard: {
+                match: {
                     name: {
-                        "value": name + "*"                  
+                        query: name,
+                        fuzziness: "AUTO"
                     }
                 }
             }
         }
+            
     }).then(function(response) {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: IncompleteGameInfo[] = [];
@@ -37,7 +39,11 @@ const getGamesByName = (req: any, res: any) => {
             formattedResults.push(res._source);
         })
 
-        res.status(200).send(formattedResults);
+        if (Object.keys(formattedResults).length !== 0) {
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send("Not found");
+        }
     }).catch(function (error) {
         res.status(404).send("Not found");
     });
@@ -68,7 +74,11 @@ const getGameById = (req: any, res: any) => {
             Object.assign(formattedResult, res._source);
         });
 
-        res.status(200).send(formattedResult);
+        if (Object.keys(formattedResult).length !== 0) {
+            res.status(200).send(formattedResult);
+        } else {
+            res.status(404).send("Not found");
+        }
     }).catch(function (error) {
         console.log(error);
         res.status(404).send("Not found");
