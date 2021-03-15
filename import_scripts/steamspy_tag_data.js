@@ -387,6 +387,7 @@ const dbIndexScheme = {
 };
 
 const objectImport = data => ({
+    id: data['appid'],
     tag_1980s: data['1980s'],
     tag_1990s: data['1990s'],
     tag_2$5d: data['2.5d'],
