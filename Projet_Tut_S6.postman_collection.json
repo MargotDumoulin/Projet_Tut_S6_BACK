@@ -279,7 +279,7 @@
 			"name": "Search By Name",
 			"item": [
 				{
-					"name": "[Steam] Search By Name (Paginated)",
+					"name": "[Steam] Search Game By Name (Paginated)",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -296,22 +296,52 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{localhost}}/games?name=c&page=10",
+							"raw": "http://{{localhost}}/api/games?name=ffensive&page=1",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
+								"api",
 								"games"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "c"
+									"value": "ffensive"
 								},
 								{
 									"key": "page",
-									"value": "10"
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Steam] Search Publisher By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/publishers?name=v&page=1",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"publishers"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "v"
+								},
+								{
+									"key": "page",
+									"value": "1"
 								}
 							]
 						}
@@ -352,14 +382,40 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/game/10",
+							"raw": "http://{{localhost}}/api/game/10",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
+								"api",
 								"game",
 								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get Games Without Parameter",
+			"item": [
+				{
+					"name": "Get Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/games",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games"
 							]
 						}
 					},
