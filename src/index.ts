@@ -1,5 +1,6 @@
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
+import { requestGames, requestGamesByName, requestGameById } from "./Request/requestsGames";
 
 const app = express();
 const port = 5000; // Server's port
@@ -14,23 +15,15 @@ app.listen( port, () => {
 const getGamesByName = (req: any, res: any) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
     const name: string = req.query.name ? req.query.name : "";
+    let request: {} = {};
+    
+    if (name !== "") {
+        request = requestGamesByName(page, name);
+    } else {
+        request = requestGames(page);
+    }
 
-    client.search({
-        index: 'project_s6_steam',
-        body: {
-            "from": ((page * 10) - 10),
-            "size": 10,
-            query: {
-                match: {
-                    name: {
-                        query: name,
-                        fuzziness: "AUTO"
-                    }
-                }
-            }
-        }
-            
-    }).then(function(response) {
+    client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: IncompleteGameInfo[] = [];
 
@@ -51,21 +44,7 @@ const getGamesByName = (req: any, res: any) => {
 const getGameById = (req: any, res: any) => {
     const id: number = req.params.id;
 
-    client.search({
-        index: [
-            'project_s6_steam', 
-            'project_s6_steam_description_data',
-            'project_s6_steam_requirements_data',
-            'project_s6_steam_media_data'
-        ],
-        body: {
-            query: {
-                match: {
-                    id: id          
-                }
-            }
-        }
-    }).then(function(response) {
+    client.search(requestGameById(id)).then(function(response) {
         const results: [] = response.body.hits.hits;
         const formattedResult: CompleteGameInfo = {};
         
