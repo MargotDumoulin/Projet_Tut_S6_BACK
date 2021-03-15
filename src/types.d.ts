@@ -1,4 +1,4 @@
-export type IncompleteGameInfo = {
+type IncompleteGameInfo = {
     id: number,
     name: string,
     release_date: Date, 
@@ -19,13 +19,13 @@ export type IncompleteGameInfo = {
     price: number
 }
 
-export type Screenshot = {
+type Screenshot = {
     id: number,
     path_thumbnail: string,
     path_full: string
 }
 
-export type CompleteGameInfo = {
+type CompleteGameInfo = {
     id: number,
     name: string,
     release_date: Date, 

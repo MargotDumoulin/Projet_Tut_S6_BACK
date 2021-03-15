@@ -1,4 +1,3 @@
-import { IncompleteGameInfo, CompleteGameInfo } from './types';
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
 
