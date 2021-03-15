@@ -130,9 +130,21 @@
 			"item": [
 				{
 					"name": "Search Steam",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": {\n    \"wildcard\": {\n      \"name\": {\n        \"value\": \"Half*\",\n        \"boost\": 1.0\n      }\n    }\n  }\n}\n\n{\n  \"from\": 5,\n  \"size\": 20,\n  \"query\": {\n    \"wildcard\": {\n      \"name\": {\n        \"value\": \"Half*\",\n        \"boost\": 1.0\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:9200/project_s6_steam/_search",
 							"protocol": "http",
@@ -255,6 +267,52 @@
 							"path": [
 								"project_s6_steamspy_tag_data",
 								"_search"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Search By Name",
+			"item": [
+				{
+					"name": "[Steam] Search By Name (Paginated)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/games?name=c&page=10",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"games"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "c"
+								},
+								{
+									"key": "page",
+									"value": "10"
+								}
 							]
 						}
 					},
