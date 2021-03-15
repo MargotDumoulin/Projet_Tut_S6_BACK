@@ -41,6 +41,9 @@
         "src/**/*.ts",
         "src/*.ts"
     ],
+    "ts-node": {
+        "files": true
+    },
     "types": ["typePatches", "node", "webpack-env"]
 }
     
