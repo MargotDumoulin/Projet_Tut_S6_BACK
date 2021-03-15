@@ -50,4 +50,4 @@ const getGamesByName = (req: any, res: any) => {
 };
 
 // --- ROUTES ----
-app.get('/games', getGamesByName);
+app.get('/api/games', getGamesByName);
