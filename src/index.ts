@@ -86,5 +86,5 @@ const getGameById = (req: any, res: any) => {
 }
 
 // --- ROUTES ----
-app.get('/games', getGamesByName);
-app.get('/game/:id', getGameById)
+app.get('/api/games', getGamesByName);
+app.get('/api/game/:id', getGameById)
