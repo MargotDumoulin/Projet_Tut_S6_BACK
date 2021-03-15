@@ -1,6 +1,5 @@
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
-import { IncompleteGameInfo } from "./types";
 
 const app = express();
 const port = 5000; // Server's port

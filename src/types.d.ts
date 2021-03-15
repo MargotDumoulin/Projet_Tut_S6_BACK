@@ -1,4 +1,4 @@
-export type IncompleteGameInfo = {
+type IncompleteGameInfo = {
     id: number,
     name: string,
     release_date: Date, 
