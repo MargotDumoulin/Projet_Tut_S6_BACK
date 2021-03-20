@@ -1,31 +1,32 @@
-// const steam = require('./steam.js');
-// const steamTagData = require('./steamspy_tag_data.js');
-// const steamSupportInfo = require('./steam_support_info.js');
-// const steamRequirementData = require('./steam_requirement_data.js');
-// const steamMediaData = require('./steam_media_data.js');
-// const steamDescriptionData = require('./steam_description_data.js');
-const csv = require('csv-parser');
-const fs = require('fs');
-const path = require('path');
 const { Client } = require('@elastic/elasticsearch');
+const publishersImport = require('./import_publishers.js');
+const developersImport = require('./import_developers.js');
+const categoriesImport = require('./import_categories.js');
+const genresImport = require('./import_genres.js');
+const platformsImport = require('./import_platforms.js');
+const tagsImport = require('./import_tags.js');
+const gamesImport = require('./import_games.js');
+const { parserInfo } = require('./steam.js');
 
 
 const client = new Client({ node: 'http://localhost:9200' });
 
-const csvNames = [
-    'steam',
-    'steamspy_tag_data',
-    'steam_support_info',
-    'steam_requirements_data',
-    'steam_media_data',
-    'steam_description_data'
+
+const imports = [
+    gamesImport,
+    publishersImport,
+    developersImport,
+    categoriesImport,
+    genresImport,
+    platformsImport,
+    tagsImport
 ];
 
 // Inserts data into ElasticSearch
-async function insertData(dataset, parserInfo) {
-    await client.indices.create(parserInfo.dbIndexScheme, { ignore: [400] })
+async function insertData(dataset, dbIndexScheme) {
+    await client.indices.create(dbIndexScheme, { ignore: [400] })
 
-    const body = dataset.flatMap(doc => [{ index: { _index: parserInfo.dbIndexScheme.index } }, doc])
+    const body = dataset.flatMap(doc => [{ index: { _index: dbIndexScheme.index } }, doc])
     const { body: bulkResponse } = await client.bulk({ refresh: true, body })
     
     if (bulkResponse.errors) {
@@ -49,27 +50,57 @@ async function insertData(dataset, parserInfo) {
         })
         console.log(erroredDocuments)
     }
-    console.log(parserInfo.dbIndexScheme.index);
-    const { body: count } = await client.count({ index: parserInfo.dbIndexScheme.index })
+    console.log(dbIndexScheme.index);
+    const { body: count } = await client.count({ index: dbIndexScheme.index })
     console.log("Documents inserted: ", count)
 }
 
-csvNames.forEach((csvName) => {
-    const csvPath = path.resolve('../csv/' + csvName + '.csv');
-    const parserInfo = require('./' + csvName + '.js');
-    const objectData = [];
+imports.forEach(async importData => {
+    const dataset = await importData.parse;
 
-    fs
-        .createReadStream(csvPath)
-        .pipe(csv())
-        .on('data', data => {
-            console.log(parserInfo);
-            objectData.push(parserInfo.objectImport(data));
-        })
-        .on('end', async () => {
-            await insertData(objectData.slice(0, objectData.length * 0.25), parserInfo).catch(console.error);
-            await insertData(objectData.slice(objectData.length * 0.25, objectData.length * 0.5), parserInfo).catch(console.error);
-            await insertData(objectData.slice(objectData.length * 0.5, objectData.length * 0.75), parserInfo).catch(console.error);
-            await insertData(objectData.slice(objectData.length * 0.75, objectData.length), parserInfo).catch(console.error);
-        });
+    // We do be slicin the data in 4 parts, because otherwise the Elasticsearch is sous l'eau
+    await insertData(dataset.slice(0, dataset.length * 0.25), importData.dbIndexScheme).catch(console.error);
+    await insertData(dataset.slice(dataset.length * 0.25, dataset.length * 0.5), importData.dbIndexScheme).catch(console.error);
+    await insertData(dataset.slice(dataset.length * 0.5, dataset.length * 0.75), importData.dbIndexScheme).catch(console.error);
+    await insertData(dataset.slice(dataset.length * 0.75, dataset.length), importData.dbIndexScheme).catch(console.error);
 })
+
+
+// We do be slicin the data in 4 parts, because otherwise the Elasticsearch is sous l'eau
+// await insertData(publishers.slice(0, publishers.length * 0.25), parserInfo).catch(console.error);
+// await insertData(publishers.slice(publishers.length * 0.25, publishers.length * 0.5), parserInfo).catch(console.error);
+// await insertData(publishers.slice(publishers.length * 0.5, publishers.length * 0.75), parserInfo).catch(console.error);
+// await insertData(publishers.slice(publishers.length * 0.75, publishers.length), parserInfo).catch(console.error);
+
+
+
+// let gamesObject = {};
+
+// csvNames.forEach((csvName) => {
+//     const csvPath = path.resolve('../csv/' + csvName + '.csv');
+//     const parserInfo = require('./' + csvName + '.js');
+//     const objectData = [];
+
+//     fs
+//         .createReadStream(csvPath)
+//         .pipe(csv())
+//         .on('data', data => {
+//             // console.log(parserInfo);
+//             objectData.push(parserInfo.objectImport(data));
+//         })
+//         .on('end', () => {
+//             console.log(objectData.length);
+//             objectData.forEach(game => {
+//                 const mergingObject = {};
+//                 mergingObject[game.id] = Object.assign({}, gamesObject[game.id], game);
+//                 gamesObject = Object.assign(gamesObject, mergingObject);
+//             });
+
+//             console.log("Mabite", Object.values(gamesObject)[0]);
+//             // We do be slicin the data in 4 parts, because otherwise the Elasticsearch is sous l'eau
+//             // await insertData(objectData.slice(0, objectData.length * 0.25), parserInfo).catch(console.error);
+//             // await insertData(objectData.slice(objectData.length * 0.25, objectData.length * 0.5), parserInfo).catch(console.error);
+//             // await insertData(objectData.slice(objectData.length * 0.5, objectData.length * 0.75), parserInfo).catch(console.error);
+//             // await insertData(objectData.slice(objectData.length * 0.75, objectData.length), parserInfo).catch(console.error);
+//         });
+// })

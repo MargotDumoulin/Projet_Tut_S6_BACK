@@ -9,114 +9,133 @@
 			"name": "Delete Tables",
 			"item": [
 				{
-					"name": "Delete Steam",
+					"name": "Delete Games",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam",
+							"raw": "http://localhost:9200/project_s6_games",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam"
+								"project_s6_games"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Media",
+					"name": "Delete Publishers",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_media_data",
+							"raw": "http://localhost:9200/project_s6_publishers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_media_data"
+								"project_s6_publishers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Description",
+					"name": "Delete Platforms",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_description_data",
+							"raw": "http://localhost:9200/project_s6_platforms",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_description_data"
+								"project_s6_platforms"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Requirements",
+					"name": "Delete Developers",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_requirements_data",
+							"raw": "http://localhost:9200/project_s6_developers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_requirements_data"
+								"project_s6_developers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Support",
+					"name": "Delete Categories",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_support_info",
+							"raw": "http://localhost:9200/project_s6_categories",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_support_info"
+								"project_s6_categories"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Steamspy",
+					"name": "Delete Genres",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steamspy_tag_data",
+							"raw": "http://localhost:9200/project_s6_genres",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steamspy_tag_data"
+								"project_s6_genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tags",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_tags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_tags"
 							]
 						}
 					},
@@ -129,31 +148,19 @@
 			"name": "Search Tables",
 			"item": [
 				{
-					"name": "Search Steam",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Search Games",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam/_search",
+							"raw": "http://localhost:9200/project_s6_games/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam",
+								"project_s6_games",
 								"_search"
 							]
 						}
@@ -161,19 +168,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Media",
+					"name": "Search Publishers",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_media_data/_search",
+							"raw": "http://localhost:9200/project_s6_publishers/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_media_data",
+								"project_s6_publishers",
 								"_search"
 							]
 						}
@@ -181,19 +188,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Description",
+					"name": "Search Platforms",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_description_data/_search",
+							"raw": "http://localhost:9200/project_s6_platforms/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_description_data",
+								"project_s6_platforms",
 								"_search"
 							]
 						}
@@ -201,31 +208,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Requirements",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Search Tags",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_requirements_data/_search",
+							"raw": "http://localhost:9200/project_s6_genres/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_requirements_data",
+								"project_s6_genres",
 								"_search"
 							]
 						}
@@ -233,19 +228,30 @@
 					"response": []
 				},
 				{
-					"name": "Search Support",
+					"name": "Search Genres",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_support_info/_search",
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_categories/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_support_info",
+								"project_s6_categories",
 								"_search"
 							]
 						}
@@ -253,19 +259,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Steamspy",
+					"name": "Search Developers",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steamspy_tag_data/_search",
+							"raw": "http://localhost:9200/project_s6_developers/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steamspy_tag_data",
+								"project_s6_developers",
 								"_search"
 							]
 						}
