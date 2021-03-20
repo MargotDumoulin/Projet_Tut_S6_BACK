@@ -13,7 +13,7 @@ app.listen( port, () => {
     console.log( `server started at http://localhost:${ port }` );
 });
 
-const getGamesByName = (req: any, res: any) => {
+const getGames = (req: any, res: any) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
     const name: string = req.query.name ? req.query.name : "";
     let request: {} = {};
@@ -64,7 +64,7 @@ const getGameById = (req: any, res: any) => {
     });
 }
 
-const getPublishersByName = (req: any, res: any) => {
+const getPublishers = (req: any, res: any) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
     const name: string = req.query.name ? req.query.name : "";
     let request: {} = {};
@@ -94,6 +94,6 @@ const getPublishersByName = (req: any, res: any) => {
 };
 
 // --- ROUTES ----
-app.get('/api/games', getGamesByName);
+app.get('/api/games', getGames);
 app.get('/api/game/:id', getGameById);
-app.get('/api/publishers', getPublishersByName);
+app.get('/api/publishers', getPublishers);

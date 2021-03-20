@@ -21,12 +21,7 @@ export const requestPublishers = (page: number) => {
         index: 'project_s6_publishers',
         body: {
             "from": ((page * 10) - 10),
-            "size": 10,
-            sort: [
-                {
-                    release_date: { "order" : "desc" }
-                }
-            ]
+            "size": 10
         }  
     }
 }
