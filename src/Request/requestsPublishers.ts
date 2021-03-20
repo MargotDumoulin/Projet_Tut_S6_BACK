@@ -1,12 +1,12 @@
 export const requestPublishersByName = (page: number, nameGiven: string) => {
     return {
-        index: 'project_s6_steam',
+        index: 'project_s6_publishers',
         body: {
             "from": ((page * 10) - 10),
             "size": 10,
             query: {
                 match: {
-                    publisher: {
+                    name: {
                         query: nameGiven,
                         fuzziness: "AUTO"
                     }
@@ -18,7 +18,7 @@ export const requestPublishersByName = (page: number, nameGiven: string) => {
 
 export const requestPublishers = (page: number) => {
     return {
-        index: 'project_s6_steam',
+        index: 'project_s6_publishers',
         body: {
             "from": ((page * 10) - 10),
             "size": 10,

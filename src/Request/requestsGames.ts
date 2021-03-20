@@ -1,6 +1,6 @@
 export const requestGamesByName = (page: number, nameGiven: string) => {
     return {
-        index: 'project_s6_steam',
+        index: 'project_s6_games',
         body: {
             "from": ((page * 10) - 10),
             "size": 10,
@@ -18,7 +18,7 @@ export const requestGamesByName = (page: number, nameGiven: string) => {
 
 export const requestGames = (page: number) => {
     return {
-        index: 'project_s6_steam',
+        index: 'project_s6_games',
         body: {
             "from": ((page * 10) - 10),
             "size": 10,
@@ -34,10 +34,7 @@ export const requestGames = (page: number) => {
 export const requestGameById = (id: number) => {
     return {
         index: [
-            'project_s6_steam', 
-            'project_s6_steam_description_data',
-            'project_s6_steam_requirements_data',
-            'project_s6_steam_media_data'
+            'project_s6_games'
         ],
         body: {
             query: {
