@@ -1,3 +1,4 @@
+import { requestPublishersByName, requestPublishers } from './Request/requestsPublishers';
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
 
@@ -31,6 +32,35 @@ const getGamesByName = (req: any, res: any) => {
         }
             
     }).then(function(response) {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: IncompleteGameInfo[] = [];
+
+        results.forEach((res: any) => {
+            formattedResults.push(res._source);
+        })
+
+        if (Object.keys(formattedResults).length !== 0) {
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send("Not found");
+        }
+    }).catch(function (error) {
+        res.status(404).send("Not found");
+    });
+};
+
+const getPublishersByName = (req: any, res: any) => {
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    const name: string = req.query.name ? req.query.name : "";
+    let request: {} = {};
+    
+    if (name !== "") {
+        request = requestPublishersByName(page, name);
+    } else {
+        request = requestPublishers(page);
+    }
+
+    client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: IncompleteGameInfo[] = [];
 
@@ -86,4 +116,5 @@ const getGameById = (req: any, res: any) => {
 
 // --- ROUTES ----
 app.get('/api/games', getGamesByName);
-app.get('/api/game/:id', getGameById)
+app.get('/api/game/:id', getGameById);
+app.get('/api/publishers', getPublishersByName);
