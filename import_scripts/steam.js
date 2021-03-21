@@ -1,5 +1,5 @@
 const dbIndexScheme = {
-    index: 'project_s6_steam',
+    index: 'project_s6_games',
     body: {
         mappings: {
             properties: {

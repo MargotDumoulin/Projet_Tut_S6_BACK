@@ -1,6 +1,7 @@
+import { requestPublishersByName, requestPublishers } from './Request/requestsPublishers';
+import { requestGamesByName, requestGames, requestGameById } from './Request/requestsGames';
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
-import { IncompleteGameInfo } from "./types";
 
 const app = express();
 const port = 5000; // Server's port
@@ -12,26 +13,18 @@ app.listen( port, () => {
     console.log( `server started at http://localhost:${ port }` );
 });
 
-const getGamesByName = (req: any, res: any) => {
+const getGames = (req: any, res: any) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
     const name: string = req.query.name ? req.query.name : "";
+    let request: {} = {};
+    
+    if (name !== "") {
+        request = requestGamesByName(page, name);
+    } else {
+        request = requestGames(page);
+    }
 
-    client.search({
-        index: 'project_s6_steam',
-        body: {
-            "from": ((page * 10) - 10),
-            "size": 10,
-            query: {
-                match: {
-                    name: {
-                        query: name,
-                        fuzziness: "AUTO"
-                    }
-                }
-            }
-        }
-            
-    }).then(function(response) {
+    client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: IncompleteGameInfo[] = [];
 
@@ -52,21 +45,7 @@ const getGamesByName = (req: any, res: any) => {
 const getGameById = (req: any, res: any) => {
     const id: number = req.params.id;
 
-    client.search({
-        index: [
-            'project_s6_steam', 
-            'project_s6_steam_description_data',
-            'project_s6_steam_requirements_data',
-            'project_s6_steam_media_data'
-        ],
-        body: {
-            query: {
-                match: {
-                    id: id          
-                }
-            }
-        }
-    }).then(function(response) {
+    client.search(requestGameById(id)).then(function(response) {
         const results: [] = response.body.hits.hits;
         const formattedResult: CompleteGameInfo = {};
         
@@ -85,6 +64,36 @@ const getGameById = (req: any, res: any) => {
     });
 }
 
+const getPublishers = (req: any, res: any) => {
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    const name: string = req.query.name ? req.query.name : "";
+    let request: {} = {};
+    
+    if (name !== "") {
+        request = requestPublishersByName(page, name);
+    } else {
+        request = requestPublishers(page);
+    }
+
+    client.search(request).then(function(response) {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: IncompleteGameInfo[] = [];
+
+        results.forEach((res: any) => {
+            formattedResults.push(res._source);
+        })
+
+        if (Object.keys(formattedResults).length !== 0) {
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send("Not found");
+        }
+    }).catch(function (error) {
+        res.status(404).send("Not found");
+    });
+};
+
 // --- ROUTES ----
-app.get('/api/games', getGamesByName);
-app.get('/api/game/:id', getGameById)
+app.get('/api/games', getGames);
+app.get('/api/game/:id', getGameById);
+app.get('/api/publishers', getPublishers);
