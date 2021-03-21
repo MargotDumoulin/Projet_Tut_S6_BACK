@@ -55,3 +55,15 @@ type CompleteGameInfo = {
     header_image: string,
     screenshots: Screenshot[]
 } | {};
+
+type DateFilter = {
+    gte?: Date;
+    gt?: Date;
+    lt?: Date;
+    lte?: Date;
+};
+
+type Filters = {
+    name: string | undefined,
+    release_date: DateFilter | undefined
+}

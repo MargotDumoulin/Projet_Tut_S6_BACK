@@ -5,18 +5,41 @@ export const requestGamesByName = (page: number, nameGiven: string) => {
             "from": ((page * 10) - 10),
             "size": 10,
             query: {
-                match: {
-                    name: {
-                        query: nameGiven,
-                        fuzziness: "AUTO"
-                    }
+                bool: {
+                    should: [
+                        {
+                            prefix: {
+                                name: nameGiven
+                            }
+                        },
+                        {
+                            fuzzy: {
+                                name: {
+                                    value: nameGiven,
+                                    fuzziness: "AUTO",
+                                    prefix_length: 0 
+                                }
+                            }
+                        }
+                    ]
                 }
-            }
+            }    
         }  
     }
 }
 
-export const requestGames = (page: number) => {
+export const requestGames = (page: number, filters: Filters) => {
+
+    let filterByDate; 
+
+    if (filters.release_date) {
+        filterByDate = {
+            range: {
+                release_date: filters.release_date
+            }
+        };
+    }
+
     return {
         index: 'project_s6_games',
         body: {
@@ -26,7 +49,19 @@ export const requestGames = (page: number) => {
                 {
                     release_date: { "order" : "desc" }
                 }
-            ]
+            ],
+            query: {
+                bool: {
+                    must: [
+                        {
+                            wildcard: filters.name ? { name: { value: filters.name } } : {},
+                        }
+                    ],
+                    filter: [
+                        filterByDate ? filterByDate : {}
+                    ]
+                }
+            }
         }  
     }
 }

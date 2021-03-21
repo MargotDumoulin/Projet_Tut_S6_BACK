@@ -1,6 +1,6 @@
-export const requestPublishersByName = (page: number, nameGiven: string) => {
+export const requestDevelopersByName = (page: number, nameGiven: string) => {
     return {
-        index: 'project_s6_publishers',
+        index: 'project_s6_developers',
         body: {
             "from": ((page * 10) - 10),
             "size": 10,
@@ -28,9 +28,9 @@ export const requestPublishersByName = (page: number, nameGiven: string) => {
     }
 }
 
-export const requestPublishers = (page: number) => {
+export const requestDevelopers = (page: number) => {
     return {
-        index: 'project_s6_publishers',
+        index: 'project_s6_developers',
         body: {
             "from": ((page * 10) - 10),
             "size": 10
