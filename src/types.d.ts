@@ -65,5 +65,6 @@ type DateFilter = {
 
 type Filters = {
     name: string | undefined,
-    release_date: DateFilter | undefined
+    release_date: DateFilter | undefined,
+    developer: [] | undefined
 }

@@ -42,7 +42,7 @@ const dbIndexScheme = {
                 name: { type: 'text' },
                 release_date: { type: 'date' },
                 english: { type: 'boolean' },
-                developer: { type: 'text' },
+                developer: { type: 'keyword'},
                 publisher: { type: 'text' },
                 platforms: { type: 'text' },
                 required_age: { type: 'byte' },

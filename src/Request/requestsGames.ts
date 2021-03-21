@@ -40,6 +40,7 @@ export const requestGames = (page: number, filters: Filters) => {
         };
     }
 
+    console.log(filters.developer);
     return {
         index: 'project_s6_games',
         body: {
@@ -53,14 +54,20 @@ export const requestGames = (page: number, filters: Filters) => {
             query: {
                 bool: {
                     must: [
-                        {
-                            wildcard: filters.name ? { name: { value: filters.name } } : {},
-                        }
+                        ...(filters.name ? [{
+                            wildcard: { name: { value: filters.name } },
+                        }] : [])
                     ],
                     filter: [
-                        filterByDate ? filterByDate : {}
-                    ]
-                }
+                        ...(filterByDate ? [filterByDate] : []),
+                        ...(filters.developer ? [{
+                            terms: {
+                                developer: filters.developer
+                            }
+                        }] : []),
+                    ],
+                },
+                
             }
         }  
     }
