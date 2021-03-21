@@ -63,8 +63,22 @@ type DateFilter = {
     lte?: Date;
 };
 
+type RatingFilter = {
+    gte?: Date;
+    gt?: Date;
+    lt?: Date;
+    lte?: Date;
+};
+
 type Filters = {
     name: string | undefined,
     release_date: DateFilter | undefined,
-    developer: [] | undefined
+    developer: [] | undefined,
+    publisher: [] | undefined,
+    platforms: [] | undefined,
+    categories: [] | undefined,
+    genres: [] | undefined,
+    steamspy_tags: [] | undefined,
+    required_age: [] | undefined,
+    positive_rating_percent: RatingFilter | undefined
 }
