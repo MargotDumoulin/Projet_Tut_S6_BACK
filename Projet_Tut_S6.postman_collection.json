@@ -282,42 +282,57 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Search By Name",
+			"name": "Get By Name",
 			"item": [
 				{
-					"name": "[Steam] Search By Name (Paginated)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Get Publisher By Name (Paginated)",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://{{localhost}}/games?name=c&page=10",
+							"raw": "http://{{localhost}}/api/publishers?name=val&page=1",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
-								"games"
+								"api",
+								"publishers"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "c"
+									"value": "val"
 								},
 								{
 									"key": "page",
-									"value": "10"
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Game By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/games/coun?page=1",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"coun"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
 								}
 							]
 						}
@@ -358,14 +373,99 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/game/10",
+							"raw": "http://{{localhost}}/api/game/10",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
+								"api",
 								"game",
 								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get All (formatted)",
+			"item": [
+				{
+					"name": "Get Games",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/games",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Publishers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/publishers",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"publishers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get With Parameters",
+			"item": [
+				{
+					"name": "Get Game With Parameters (Paginated)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"c\",\n    \"release_date\": {\n        \"lte\": \"2020-01-01\"\n    },\n    \"positive_rating_percent\": {\n        \"gte\": \"11\"\n    },\n    \"developer\": [\"Nicholas Hydock\"],\n    \"publisher\": [\"Luna.red\"],\n    \"platforms\": [\"mac\"],\n    \"categories\": [\"Single-player\", \"co\"],\n    \"genres\": [\"Adventure\"],\n    \"steamspy_tags\": [\"Indie\"],\n    \"required_age\": [\"0\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/games?page=1",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
 							]
 						}
 					},
