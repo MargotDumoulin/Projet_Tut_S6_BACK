@@ -32,6 +32,8 @@ export const requestGames = (page: number, filters: Filters) => {
 
     let filterByDate; 
     let filterByPositiveRatingPercent;
+    let filterByCategories;
+    let filterByGenres;
 
     if (filters.release_date) {
         filterByDate = {
@@ -49,6 +51,22 @@ export const requestGames = (page: number, filters: Filters) => {
         };
     }
 
+    if (filters.categories) {
+        filterByCategories = filters.categories.map(category => ({
+            match: {
+                categories: category
+            }
+        }));
+    }
+
+    if (filters.genres) {
+        filterByGenres = filters.genres.map(genre => ({
+            match: {
+                genres: genre
+            }
+        }));
+    }
+
     return {
         index: 'project_s6_games',
         body: {
@@ -64,7 +82,9 @@ export const requestGames = (page: number, filters: Filters) => {
                     must: [
                         ...(filters.name ? [{
                             wildcard: { name: { value: filters.name } },
-                        }] : [])
+                        }] : []),
+                        ...(filterByCategories ? filterByCategories : []),
+                        ...(filterByGenres ? filterByGenres : [])
                     ],
                     filter: [
                         ...(filterByDate ? [filterByDate] : []),
@@ -83,16 +103,6 @@ export const requestGames = (page: number, filters: Filters) => {
                             terms: {
                                 platforms: filters.platforms
                             }
-                        }] : []),
-                        ...(filters.categories ? [{
-                            terms: {
-                                categories: filters.categories
-                            } // TODO: set this to an AND condition (actually this works as a OR)
-                        }] : []),
-                        ...(filters.genres ? [{
-                            terms: {
-                                genres: filters.genres
-                            } // TODO: set this to an AND condition (actually this works as a OR)
                         }] : []),
                         ...(filters.steamspy_tags ? [{
                             terms: {
