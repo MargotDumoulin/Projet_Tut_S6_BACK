@@ -8,9 +8,7 @@ const tagsImport = require('./import_tags.js');
 const gamesImport = require('./import_games.js');
 const { parserInfo } = require('./steam.js');
 
-
 const client = new Client({ node: 'http://localhost:9200' });
-
 
 const imports = [
     gamesImport,
@@ -50,57 +48,32 @@ async function insertData(dataset, dbIndexScheme) {
         })
         console.log(erroredDocuments)
     }
-    console.log(dbIndexScheme.index);
-    const { body: count } = await client.count({ index: dbIndexScheme.index })
-    console.log("Documents inserted: ", count)
 }
 
-imports.forEach(async importData => {
-    const dataset = await importData.parse;
 
-    // We do be slicin the data in 4 parts, because otherwise the Elasticsearch is sous l'eau
-    await insertData(dataset.slice(0, dataset.length * 0.25), importData.dbIndexScheme).catch(console.error);
-    await insertData(dataset.slice(dataset.length * 0.25, dataset.length * 0.5), importData.dbIndexScheme).catch(console.error);
-    await insertData(dataset.slice(dataset.length * 0.5, dataset.length * 0.75), importData.dbIndexScheme).catch(console.error);
-    await insertData(dataset.slice(dataset.length * 0.75, dataset.length), importData.dbIndexScheme).catch(console.error);
-})
+(async () => {
+    for (let importData of imports) {
+        const datasetName = importData.dbIndexScheme.index.split('_').reverse()[0].toUpperCase();
 
+        console.log(`------ Parsing ${datasetName} CSV...`);
+        const dataset = await importData.parse();
+        console.log(`------ ${datasetName} parsed, inserting into Elasticsearch...`);
+        
+        // If the dataset is small enough, we can insert it directly into Elasticsearch
+        // Else we do be slicin the data in multiple parts, because otherwise the Elasticsearch is sous l'eau
+        if (dataset.length < 100) {
+            await insertData(dataset, importData.dbIndexScheme).catch(console.error);
+        } else {
+            const NUMBER_OF_PARTS = 20;
+            for (let i = 0; i < NUMBER_OF_PARTS; i++) {
+                const percentage = 1 / NUMBER_OF_PARTS;
+                const dataChunk = dataset.slice(dataset.length * (percentage * i), dataset.length * (percentage * (i+1)));
+                await insertData(dataChunk, importData.dbIndexScheme).catch(console.error);
+            }
+        }
 
-// We do be slicin the data in 4 parts, because otherwise the Elasticsearch is sous l'eau
-// await insertData(publishers.slice(0, publishers.length * 0.25), parserInfo).catch(console.error);
-// await insertData(publishers.slice(publishers.length * 0.25, publishers.length * 0.5), parserInfo).catch(console.error);
-// await insertData(publishers.slice(publishers.length * 0.5, publishers.length * 0.75), parserInfo).catch(console.error);
-// await insertData(publishers.slice(publishers.length * 0.75, publishers.length), parserInfo).catch(console.error);
+        console.log(`------ ${datasetName} inserted!\n`);
+    }
 
-
-
-// let gamesObject = {};
-
-// csvNames.forEach((csvName) => {
-//     const csvPath = path.resolve('../csv/' + csvName + '.csv');
-//     const parserInfo = require('./' + csvName + '.js');
-//     const objectData = [];
-
-//     fs
-//         .createReadStream(csvPath)
-//         .pipe(csv())
-//         .on('data', data => {
-//             // console.log(parserInfo);
-//             objectData.push(parserInfo.objectImport(data));
-//         })
-//         .on('end', () => {
-//             console.log(objectData.length);
-//             objectData.forEach(game => {
-//                 const mergingObject = {};
-//                 mergingObject[game.id] = Object.assign({}, gamesObject[game.id], game);
-//                 gamesObject = Object.assign(gamesObject, mergingObject);
-//             });
-
-//             console.log("Mabite", Object.values(gamesObject)[0]);
-//             // We do be slicin the data in 4 parts, because otherwise the Elasticsearch is sous l'eau
-//             // await insertData(objectData.slice(0, objectData.length * 0.25), parserInfo).catch(console.error);
-//             // await insertData(objectData.slice(objectData.length * 0.25, objectData.length * 0.5), parserInfo).catch(console.error);
-//             // await insertData(objectData.slice(objectData.length * 0.5, objectData.length * 0.75), parserInfo).catch(console.error);
-//             // await insertData(objectData.slice(objectData.length * 0.75, objectData.length), parserInfo).catch(console.error);
-//         });
-// })
+    console.log('++++++ Done.\n');
+})();

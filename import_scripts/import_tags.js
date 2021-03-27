@@ -1,24 +1,22 @@
-const csv = require('csv-parser');
+const neatCsv = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
 
-const parse = new Promise((resolve) => {
+async function parse() {
     const csvPath = path.resolve('../csv/steam.csv');
     const parserInfo = require('./steam.js');
     
     const tagsSet = new Set();
-    fs
-    .createReadStream(csvPath)
-    .pipe(csv())
-    .on('data', data => {
+    const rawCsv = fs.readFileSync(csvPath, { encoding: 'utf8'});
+    const csvData = await neatCsv(rawCsv);
+    
+    for (let data of csvData) {
         parserInfo.objectImport(data).steamspy_tags.forEach(tag => {
             tagsSet.add(tag);
         });
-    })
-    .on('end', () => {
-        resolve(Array.from(tagsSet).map(tagName => ({ name: tagName })));
-    });
-});
+    }
+    return Array.from(tagsSet).map(tagName => ({ name: tagName }));
+}
 
 const dbIndexScheme = {
     index: 'project_s6_tags',

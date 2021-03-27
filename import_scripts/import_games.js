@@ -1,4 +1,4 @@
-const csv = require('csv-parser');
+const neatCsv = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
 
@@ -11,27 +11,25 @@ const csvNames = [
     'steam_description_data'
 ];
 
-const parse = new Promise((resolve) => {
+async function parse() {
     let gamesObject = {};
     
-    csvNames.forEach((csvName) => {
+    for await (let csvName of csvNames) {
         const csvPath = path.resolve('../csv/' + csvName + '.csv');
         const parserInfo = require('./' + csvName + '.js');
         
-        fs
-            .createReadStream(csvPath)
-            .pipe(csv())
-            .on('data', data => {
-                const parsedInfo = parserInfo.objectImport(data);
-                const mergingObject = {};
-                mergingObject[parsedInfo.id] = Object.assign({}, gamesObject[parsedInfo.id], parsedInfo);
-                gamesObject = Object.assign(gamesObject, mergingObject);
-            })
-            .on('end', () => {
-                resolve(Object.values(gamesObject));
-            });
-    })
-});
+        const rawCsv = fs.readFileSync(csvPath, { encoding: 'utf8'});
+        const csvData = await neatCsv(rawCsv);
+        
+        for await (let data of csvData) {
+            const parsedInfo = parserInfo.objectImport(data);
+            const mergingObject = {};
+            mergingObject[parsedInfo.id] = Object.assign({}, gamesObject[parsedInfo.id], parsedInfo);
+            gamesObject = Object.assign(gamesObject, mergingObject);
+        }
+    }
+    return Object.values(gamesObject);
+}
 
 const dbIndexScheme = {
     index: 'project_s6_games',

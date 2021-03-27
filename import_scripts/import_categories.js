@@ -1,24 +1,24 @@
-const csv = require('csv-parser');
+const neatCsv = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
 
-const parse = new Promise((resolve) => {
+
+async function parse() {
     const csvPath = path.resolve('../csv/steam.csv');
     const parserInfo = require('./steam.js');
     
     const categoriesSet = new Set();
-    fs
-        .createReadStream(csvPath)
-        .pipe(csv())
-        .on('data', data => {
-            parserInfo.objectImport(data).categories.forEach(categorie => {
-                categoriesSet.add(categorie);
-            });
-        })
-        .on('end', () => {
-            resolve(Array.from(categoriesSet).map(categorieName => ({ name: categorieName })));
+    const rawCsv = fs.readFileSync(csvPath, { encoding: 'utf8'});
+    const csvData = await neatCsv(rawCsv);
+    
+    for (let data of csvData) {
+        parserInfo.objectImport(data).categories.forEach(categorie => {
+            categoriesSet.add(categorie);
         });
-});
+    }
+    return Array.from(categoriesSet).map(categorieName => ({ name: categorieName }));
+}
+
 
 const dbIndexScheme = {
     index: 'project_s6_categories',
