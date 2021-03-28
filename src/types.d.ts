@@ -55,3 +55,11 @@ type CompleteGameInfo = {
     header_image: string,
     screenshots: Screenshot[]
 } | {};
+
+type CompleteUser = {
+    id: number,
+    lastname: string,
+    firstName: string,
+    email: string,
+    password: string
+} |{};

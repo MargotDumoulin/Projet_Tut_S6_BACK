@@ -84,6 +84,39 @@ const getGameById = (req: any, res: any) => {
     });
 }
 
+const get1user = (req: any, res: any) => {
+    const id: number = req.params.id;
+    client.search({
+        index: [
+            'project_s6_users',
+        ],
+        body: {
+            query: {
+                match: {
+                    id: id
+                }
+            }
+        }
+    }).then(function(response){
+        const results: [] = response.body.hits.hits;
+        const formattedResult: CompleteUser = {};
+
+        results.forEach((res: any) => {
+            Object.assign(formattedResult, res._source);
+        });
+        if (Object.keys(formattedResult).length !== 0) {
+            res.status(200).send(formattedResult);
+        } else {
+            res.status(404).send("Invalid credentials");
+        }
+    }).catch(function (error) {
+        console.log(error);
+        res.status(404).send("Invalid credential");
+    });
+    
+}
+
 // --- ROUTES ----
 app.get('/api/games', getGamesByName);
 app.get('/api/game/:id', getGameById)
+app.get('/api/login/:id', get1user);
