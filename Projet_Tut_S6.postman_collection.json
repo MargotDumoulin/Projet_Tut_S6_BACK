@@ -213,14 +213,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_genres/_search",
+							"raw": "http://localhost:9200/project_s6_tags/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_genres",
+								"project_s6_tags",
 								"_search"
 							]
 						}
@@ -233,7 +233,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:9200/project_s6_genres/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_genres",
+								"_search"
+							]
 						}
 					},
 					"response": []
@@ -319,20 +328,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/games/coun?page=1",
+							"raw": "http://{{localhost}}/api/games?name=Counter-Strike: Condi",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
 								"api",
-								"games",
-								"coun"
+								"games"
 							],
 							"query": [
 								{
-									"key": "page",
-									"value": "1"
+									"key": "name",
+									"value": "Counter-Strike: Condi"
 								}
 							]
 						}
@@ -398,6 +406,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Counter-Strike: Condition\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://{{localhost}}/api/games",
 							"protocol": "http",
@@ -439,12 +456,15 @@
 			"item": [
 				{
 					"name": "Get Game With Parameters (Paginated)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"c\",\n    \"release_date\": {\n        \"lte\": \"2020-01-01\"\n    },\n    \"positive_rating_percent\": {\n        \"gte\": \"11\"\n    },\n    \"developer\": [\"Nicholas Hydock\"],\n    \"publisher\": [\"Luna.red\"],\n    \"platforms\": [\"mac\"],\n    \"categories\": [\"Single-player\", \"co\"],\n    \"genres\": [\"Adventure\"],\n    \"steamspy_tags\": [\"Indie\"],\n    \"required_age\": [\"0\"]\n}",
+							"raw": "{\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -452,20 +472,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{localhost}}/api/games?page=1",
+							"raw": "http://{{localhost}}/api/games/Half-Life: Blue Shift",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
 								"api",
-								"games"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								}
+								"games",
+								"Half-Life: Blue Shift"
 							]
 						}
 					},
