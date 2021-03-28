@@ -16,12 +16,16 @@ app.listen( port, () => {
 
 const getGames = (req: any, res: any) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
+    const name: string = req.query.name ? req.query.name : "";
     const filters: Filters = req.body;
 
     let request: {} = {};
-    
-    request = requestGames(page, filters);
-    console.log(request);
+
+    if (name !== "") {
+        request = requestGamesByName(page, name);
+    } else {
+        request = requestGames(page, filters);
+    }
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
@@ -41,31 +45,6 @@ const getGames = (req: any, res: any) => {
         res.status(404).send("Not found");
     });
 };
-
-const getGamesByName = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    const name: string = req.query.name ? req.query.name : "";
-
-    const request = requestGamesByName(page, name);
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: IncompleteGameInfo[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        console.log(error.meta.body.error);
-        res.status(404).send("Not found");
-    });
-}
 
 const getGameById = (req: any, res: any) => {
     const id: number = req.params.id;
@@ -119,6 +98,6 @@ const getPublishers = (req: any, res: any) => {
 
 // --- ROUTES ----
 app.post('/api/games', getGames);
-app.get('/api/games/:name', getGamesByName);
+app.get('/api/games', getGames);
 app.get('/api/game/:id', getGameById);
 app.get('/api/publishers', getPublishers);
