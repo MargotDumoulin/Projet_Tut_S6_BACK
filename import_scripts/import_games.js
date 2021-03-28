@@ -37,7 +37,7 @@ const dbIndexScheme = {
         mappings: {
             properties: {
                 id: { type: 'integer' },
-                name: { type: 'text' },
+                name: { type: 'keyword' },
                 release_date: { type: 'date' },
                 english: { type: 'boolean' },
                 developer: { type: 'keyword'},

@@ -57,7 +57,7 @@ export const requestGames = (page: number, filters: Filters) => {
                     lang: "painless"
                 }
             }
-        };
+        }; 
     }
 
     if (filters.categories) {
@@ -90,7 +90,7 @@ export const requestGames = (page: number, filters: Filters) => {
                 bool: {
                     must: [
                         ...(filters.name ? [{
-                            wildcard: { name: { value: filters.name } },
+                            wildcard: { name: { value: filters.name + "*" } },
                         }] : []),
                         ...(filterByCategories ? filterByCategories : []),
                         ...(filterByGenres ? filterByGenres : []),
