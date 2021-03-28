@@ -346,6 +346,64 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Developer By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/developers?name=val&page=1",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"developers"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "val"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tag By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/tags?name=val&page=1",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "val"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -403,12 +461,15 @@
 			"item": [
 				{
 					"name": "Get Games",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Counter-Strike: Condition\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -447,6 +508,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Developers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/developers",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"developers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/tags",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"tags"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -456,15 +555,12 @@
 			"item": [
 				{
 					"name": "Get Game With Parameters (Paginated)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n}",
+							"raw": "{\n    \"name\": \"Counter-Strike: Condition\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -472,15 +568,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{localhost}}/api/games/Half-Life: Blue Shift",
+							"raw": "http://{{localhost}}/api/games",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
 								"api",
-								"games",
-								"Half-Life: Blue Shift"
+								"games"
 							]
 						}
 					},
