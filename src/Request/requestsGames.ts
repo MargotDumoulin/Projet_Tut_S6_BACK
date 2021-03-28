@@ -45,8 +45,17 @@ export const requestGames = (page: number, filters: Filters) => {
 
     if (filters.positive_rating_percent) {
         filterByPositiveRatingPercent = {
-            range: {
-                positive_ratings: filters.positive_rating_percent // TODO: apply a *real* percentage
+            script: {
+                script: {
+                    source: `(doc['positive_ratings'].size() > 0 && doc['negative_ratings'].size() > 0) 
+                            && (
+                                    doc['positive_ratings'].value * 100 / (doc['positive_ratings'].value + doc['negative_ratings'].value)
+                                ) >= params['positive_rating_percent']`,
+                    params: {
+                        positive_rating_percent: Number(filters.positive_rating_percent)
+                    },
+                    lang: "painless"
+                }
             }
         };
     }
@@ -84,11 +93,11 @@ export const requestGames = (page: number, filters: Filters) => {
                             wildcard: { name: { value: filters.name } },
                         }] : []),
                         ...(filterByCategories ? filterByCategories : []),
-                        ...(filterByGenres ? filterByGenres : [])
+                        ...(filterByGenres ? filterByGenres : []),
                     ],
                     filter: [
                         ...(filterByDate ? [filterByDate] : []),
-                        ...(filterByDate ? [filterByPositiveRatingPercent] : []),
+                        ...(filterByPositiveRatingPercent ? [filterByPositiveRatingPercent] : []),
                         ...(filters.developer ? [{
                             terms: {
                                 developer: filters.developer
