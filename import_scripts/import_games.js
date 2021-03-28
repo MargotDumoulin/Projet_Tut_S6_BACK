@@ -15,7 +15,7 @@ async function parse() {
     let gamesObject = {};
     
     for await (let csvName of csvNames) {
-        const csvPath = path.resolve('../csv/' + csvName + '.csv');
+        const csvPath = path.resolve('csv/' + csvName + '.csv');
         const parserInfo = require('./' + csvName + '.js');
         
         const rawCsv = fs.readFileSync(csvPath, { encoding: 'utf8'});

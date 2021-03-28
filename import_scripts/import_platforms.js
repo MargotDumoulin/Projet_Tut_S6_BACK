@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function parse() {
-    const csvPath = path.resolve('../csv/steam.csv');
+    const csvPath = path.resolve('csv/steam.csv');
     const parserInfo = require('./steam.js');
     
     const platformsSet = new Set();
