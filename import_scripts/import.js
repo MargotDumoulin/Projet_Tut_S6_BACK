@@ -64,7 +64,7 @@ async function insertData(dataset, dbIndexScheme) {
         if (dataset.length < 100) {
             await insertData(dataset, importData.dbIndexScheme).catch(console.error);
         } else {
-            const NUMBER_OF_PARTS = 20;
+            const NUMBER_OF_PARTS = 40;
             for (let i = 0; i < NUMBER_OF_PARTS; i++) {
                 const percentage = 1 / NUMBER_OF_PARTS;
                 const dataChunk = dataset.slice(dataset.length * (percentage * i), dataset.length * (percentage * (i+1)));
