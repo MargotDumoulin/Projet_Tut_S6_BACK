@@ -34,6 +34,11 @@ async function parse() {
 const dbIndexScheme = {
     index: 'project_s6_games',
     body: {
+        settings: {
+            index: {
+                max_result_window: 30000
+            }
+        },
         mappings: {
             properties: {
                 id: { type: 'integer' },
