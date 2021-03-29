@@ -13,9 +13,9 @@ export const requestPublishersByName = (page: number, nameGiven: string) => {
                             }
                         },
                         {
-                            fuzzy: {
+                            match: {
                                 name: {
-                                    value: nameGiven,
+                                    query: nameGiven,
                                     fuzziness: "AUTO",
                                     prefix_length: 0 
                                 }

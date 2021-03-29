@@ -37,12 +37,21 @@ const dbIndexScheme = {
         settings: {
             index: {
                 max_result_window: 30000
+            },
+            analysis: {
+                normalizer: {
+                    my_normalizer: {
+                        type: "custom",
+                        char_filter: [],
+                        filter: "lowercase"
+                    }
+                }
             }
         },
         mappings: {
             properties: {
                 id: { type: 'integer' },
-                name: { type: 'keyword' },
+                name: { type: 'keyword', normalizer: "my_normalizer" },
                 release_date: { type: 'date' },
                 english: { type: 'boolean' },
                 developer: { type: 'keyword'},
@@ -439,7 +448,7 @@ const dbIndexScheme = {
                 header_image: { type: 'text' },
                 screenshots: { type: 'object' },
                 background: { type: 'text' },
-                movies: { type: 'text' },
+                movies: { type: 'object' },
                 pc_requirements: { type: 'object' },
                 mac_requirements: { type: 'object' },
                 linux_requirements: { type: 'object' },

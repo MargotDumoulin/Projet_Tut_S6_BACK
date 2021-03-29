@@ -21,9 +21,20 @@ async function parse() {
 const dbIndexScheme = {
     index: 'project_s6_publishers',
     body: {
+        settings: {
+            analysis: {
+                normalizer: {
+                    my_normalizer: {
+                        type: "custom",
+                        char_filter: [],
+                        filter: "lowercase"
+                    }
+                }
+            }
+        },
         mappings: {
             properties: {
-                name: { type: 'text' }
+                name: { type: 'keyword', normalizer: "my_normalizer" }
             }
         }
     } 

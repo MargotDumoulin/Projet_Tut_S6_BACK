@@ -1,4 +1,5 @@
 
+// -Ces commentaires concernent la notation "de base" de JS-
 // On a changé le nom de l'attribut '2.5d' en '2$5d', car JS n'accepte pas le point dans une clé
 // Et on a rajouté le préfixe 'tag_' car JS n'accepte pas les clés commençant par des chiffres
 // Et on a changé '&' en 'and' parce que JS n'accepte pas non plus les clés contenant des '&'

@@ -46,7 +46,7 @@ async function insertData(dataset, dbIndexScheme) {
                 })
             }
         })
-        console.log(erroredDocuments)
+        console.log('error during insertion');
     }
 }
 
@@ -67,7 +67,7 @@ async function insertData(dataset, dbIndexScheme) {
             const NUMBER_OF_PARTS = 40;
             for (let i = 0; i < NUMBER_OF_PARTS; i++) {
                 const percentage = 1 / NUMBER_OF_PARTS;
-                const dataChunk = dataset.slice(dataset.length * (percentage * i), dataset.length * (percentage * (i+1)));
+                const dataChunk = dataset.slice(dataset.length * (percentage * i), dataset.length * (percentage * (i + 1)));
                 await insertData(dataChunk, importData.dbIndexScheme).catch(console.error);
             }
         }

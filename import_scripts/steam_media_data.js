@@ -1,24 +1,22 @@
-const dbIndexScheme = {
-    index: 'project_s6_steam_media_data',
-    body: {
-        mappings: {
-            properties: {
-                id: { type: 'integer' },
-                header_image: { type: 'text' },
-                screenshots: { type: 'object' },
-                background: { type: 'text' },
-                movies: { type: 'text' }
-            }
+const JSON5 = require('json5');
+// TODO : use JSON5 everywhere instead, in the future
+
+const objectImport = (data) => {
+    try {
+        return {
+            id: data.steam_appid,
+            header_image: data.header_image,
+            screenshots: JSON.parse(data.screenshots.replace(/'/g, '"')),
+            background: data.background,
+            movies: data.movies ? JSON5.parse(data.movies
+                                .replace(/True/g, 'true')
+                                .replace(/False/g, 'false')) : []
         }
+    } catch (e) {
+        console.log(data.movies);
+        console.log(e);
     }
 };
 
-const objectImport = (data) => ({
-    id: data.steam_appid,
-    header_image: data.header_image,
-    screenshots: JSON.parse(data.screenshots.replace(/'/g, '"')),
-    background: data.background,
-    movies: data.movies
-});
+module.exports = { objectImport };
 
-module.exports = { objectImport, dbIndexScheme };

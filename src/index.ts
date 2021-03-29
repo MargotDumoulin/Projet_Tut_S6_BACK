@@ -32,7 +32,7 @@ const getGames = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: IncompleteGameInfo[] = [];
+        let formattedResults: Game[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
@@ -54,7 +54,7 @@ const getGameById = (req: any, res: any) => {
 
     client.search(requestGameById(id)).then(function(response) {
         const results: [] = response.body.hits.hits;
-        const formattedResult: CompleteGameInfo = {};
+        const formattedResult: Game = {};
         
         results.forEach((res: any) => {
             Object.assign(formattedResult, res._source);
@@ -85,7 +85,7 @@ const getPublishers = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: IncompleteGameInfo[] = [];
+        let formattedResults: Game[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
@@ -116,7 +116,7 @@ const getDevelopers = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: IncompleteGameInfo[] = [];
+        let formattedResults: Game[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
@@ -146,7 +146,7 @@ const getTags = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: IncompleteGameInfo[] = [];
+        let formattedResults: Game[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
