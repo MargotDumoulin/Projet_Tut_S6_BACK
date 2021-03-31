@@ -4,6 +4,7 @@ import { requestDevelopersByName, requestDevelopers } from './Request/requestsDe
 import { requestGamesByName, requestGames, requestGameById } from './Request/requestsGames';
 import { requestCategories } from './Request/requestsCategories';
 import { requestPlatforms } from './Request/requestsPlatforms';
+import { requestGenres } from './Request/requestsGenres';
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
 
@@ -215,6 +216,31 @@ const getPlatforms = (req: any, res: any) => {
     });
 };
 
+// ------------- GENRES -------------------
+const getGenres = (req: any, res: any) => {
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    let request: {} = {};
+    
+    request = requestGenres(page);
+
+    client.search(request).then(function(response) {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: Platform[] = [];
+
+        results.forEach((res: any) => {
+            formattedResults.push(res._source);
+        })
+
+        if (Object.keys(formattedResults).length !== 0) {
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send("Not found");
+        }
+    }).catch(function (error) {
+        res.status(404).send("Not found");
+    });
+};
+
 // --- ROUTES ----
 /* GAMES */
 app.post('/api/games', getGames);
@@ -235,4 +261,7 @@ app.get('/api/categories', getCategories);
 
 /* PLATFORMS */
 app.get('/api/platforms', getPlatforms);
+
+/* GENRES */
+app.get('/api/genres', getGenres);
 
