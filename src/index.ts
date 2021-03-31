@@ -2,6 +2,7 @@ import { requestPublishersByName, requestPublishers } from './Request/requestsPu
 import { requestTagsByName, requestTags } from './Request/requestsTags';
 import { requestDevelopersByName, requestDevelopers } from './Request/requestsDevelopers';
 import { requestGamesByName, requestGames, requestGameById } from './Request/requestsGames';
+import { requestCategories } from './Request/requestsCategories';
 import express from "express";
 import { Client }  from "@elastic/elasticsearch";
 
@@ -85,7 +86,7 @@ const getPublishers = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: Game[] = [];
+        let formattedResults: Publisher[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
@@ -116,7 +117,7 @@ const getDevelopers = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: Game[] = [];
+        let formattedResults: Developer[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
@@ -146,7 +147,33 @@ const getTags = (req: any, res: any) => {
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: Game[] = [];
+        let formattedResults: Tag[] = [];
+
+        results.forEach((res: any) => {
+            formattedResults.push(res._source);
+        })
+
+        if (Object.keys(formattedResults).length !== 0) {
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send("Not found");
+        }
+    }).catch(function (error) {
+        res.status(404).send("Not found");
+    });
+};
+
+
+// ------------- CATEGORIES -------------------
+const getCategories = (req: any, res: any) => {
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    let request: {} = {};
+    
+    request = requestCategories(page);
+
+    client.search(request).then(function(response) {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: Category[] = [];
 
         results.forEach((res: any) => {
             formattedResults.push(res._source);
@@ -176,4 +203,7 @@ app.get('/api/developers', getDevelopers);
 
 /* TAGS */
 app.get('/api/tags', getTags);
+
+/* CATEGORIES */
+app.get('/api/categories', getCategories);
 

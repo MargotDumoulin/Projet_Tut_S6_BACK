@@ -36,6 +36,22 @@ type RatingFilter = {
     lte?: Date;
 };
 
+type Category = {
+    name: string;
+};
+
+type Developer = {
+    name: string;
+};
+
+type Publisher = {
+    name: string;
+};
+
+type Tag = {
+    name: string;
+};
+
 type Filters = {
     name: string | undefined,
     release_date: DateFilter | undefined,
