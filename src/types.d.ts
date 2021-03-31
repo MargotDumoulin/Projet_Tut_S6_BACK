@@ -52,6 +52,10 @@ type Tag = {
     name: string;
 };
 
+type Platform = {
+    name: string;
+}
+
 type Filters = {
     name: string | undefined,
     release_date: DateFilter | undefined,
