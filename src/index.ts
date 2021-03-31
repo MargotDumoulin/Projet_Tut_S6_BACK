@@ -3,9 +3,6 @@ import { Client } from "@elastic/elasticsearch";
 
 const cryptoRandomString = require('crypto-random-string');
 
-const router = express.Router();
-const bodyParser = require("body-parser");
-
 const app = express();
 const port = 5000; // Server's port
 

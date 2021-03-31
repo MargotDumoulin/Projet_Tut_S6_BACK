@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "176530b3-e85b-4ba8-9ae1-0f879341ddf2",
+		"name": "Projet Tutoré S6 UserCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastname\": \"wick\",\r\n    \"firstname\": \"John\",\r\n    \"email\": \"JohnWick@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"confirm_password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/project_s6_users/user/create",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"project_s6_users",
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/project_s6_users/user/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"project_s6_users",
+						"user",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/user/login?email=and.loic@outlook.com&password=motdepasse",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "and.loic@outlook.com"
+						},
+						{
+							"key": "password",
+							"value": "motdepasse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api/user/create?lastname=wick&firstname=John&email=JohnWk@gmail.com&password=passworde&confirm_password=passworde",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"create"
+					],
+					"query": [
+						{
+							"key": "lastname",
+							"value": "wick"
+						},
+						{
+							"key": "firstname",
+							"value": "John"
+						},
+						{
+							"key": "email",
+							"value": "JohnWk@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "passworde"
+						},
+						{
+							"key": "confirm_password",
+							"value": "passworde"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
