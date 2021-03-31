@@ -57,9 +57,7 @@ type CompleteGameInfo = {
 } | {};
 
 type CompleteUser = {
-    id: number,
     lastname: string,
     firstName: string,
-    email: string,
-    password: string
-} |{};
+    email: string
+} | {};

@@ -19,7 +19,6 @@ const csvNames = [
     'steam_requirements_data',
     'steam_media_data',
     'steam_description_data',
-    'users'
 ];
 
 // Inserts data into ElasticSearch

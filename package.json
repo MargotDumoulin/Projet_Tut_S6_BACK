@@ -12,6 +12,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.11.0",
     "@types/elasticsearch": "^5.0.37",
+    "crypto-random-string": "^3.3.1",
     "csv-parser": "^3.0.0",
     "express": "^4.17.1"
   },
