@@ -123,13 +123,15 @@ const get1user = (req: any, res: any) => {
         let user = {
             lastname: false,
             firstname: false,
-            email: false
+            email: false,
+            token: false
         }
 
         results.forEach((res: any) => {
             user.lastname = res._source['lastname'];
             user.firstname = res._source['firstname'];
             user.email = res._source['email'];
+            user.token = res._source['token'];
             Object.assign(formattedResult, res._source);
         });
         if (Object.keys(formattedResult).length !== 0) {
@@ -181,6 +183,9 @@ const create1user = (req: any, res: any) => {
             res.status(401).send("Email already used !");
         }
 
+        if (password.length <= 7 ){
+            res.status(401).send("Passwords is too short !");
+        }
         // PASSWORD : password verification if they match
         if (password !== confirm_password) {
             samePassword = false;
@@ -188,17 +193,18 @@ const create1user = (req: any, res: any) => {
         }
 
         // EMAIL & PASSWORD : double verif : maybe useless ?  
-        if ((samePassword === true) && (emailUsed === false)) {
-            // TODO : USER INSERTION HERE 
-            /**  
-             * User :
-             * lastname: string
-             * firstname: string
-             * email: string
-             * password: string
-             * token: string -> string with a length of 10 random char (a-Z0-9*) 
-            */
-            res.status(200).send("The user can be created ! His token is : " + token);
+        if ((samePassword === true) && (emailUsed === false) && (password.length > 7 )) {
+            client.index({
+                index: "project_s6_users",
+                body: {
+                    "lastname": lastname, // string
+                    "firstname": firstname, // string
+                    "email": email, // string
+                    "password": password, // string
+                    "token": token  // string with a length of 10 random char (a-Z0-9*) 
+                }
+            });
+            res.status(200).send("Your account has been created !");
         }
     }).catch(function (error) {
         console.log(error);
