@@ -23,36 +23,33 @@ type Webm = {
 };
 
 type DateFilter = {
-    gte?: Date;
-    gt?: Date;
-    lt?: Date;
-    lte?: Date;
-};
-
-type RatingFilter = {
-    gte?: Date;
-    gt?: Date;
-    lt?: Date;
-    lte?: Date;
-};
-
-type Category = {
-    name: string;
-};
-
-type Developer = {
-    name: string;
+    gte?: Date | string;
+    gt?: Date | string;
+    lt?: Date | string;
+    lte?: Date | string;
 };
 
 type Publisher = {
     name: string;
-};
+}
+
+type Developer = {
+    name: string;
+}
 
 type Tag = {
     name: string;
-};
+}
+
+type Category = {
+    name: string;
+}
 
 type Platform = {
+    name: string;
+}
+
+type Genre = {
     name: string;
 }
 
@@ -66,7 +63,7 @@ type Filters = {
     genres: string[] | undefined,
     steamspy_tags: string[] | undefined,
     required_age: number[] | undefined,
-    positive_rating_percent: RatingFilter | undefined
+    positive_rating_percent: number | undefined
 };
 
 type Game = {
@@ -475,3 +472,4 @@ type Game = {
     support_url: string,
     support_email: string,
 } | {};
+
