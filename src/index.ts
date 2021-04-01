@@ -1,12 +1,12 @@
-import { requestPublishersByName, requestPublishers } from './Request/requestsPublishers';
-import { requestTagsByName, requestTags } from './Request/requestsTags';
-import { requestDevelopersByName, requestDevelopers } from './Request/requestsDevelopers';
-import { requestGamesByName, requestGames, requestGameById } from './Request/requestsGames';
-import { requestCategories } from './Request/requestsCategories';
-import { requestPlatforms } from './Request/requestsPlatforms';
-import { requestGenres } from './Request/requestsGenres';
-import express from "express";
-import { Client }  from "@elastic/elasticsearch";
+import { getCategories } from './Routes/categories';
+import express from 'express';
+import { Client }  from '@elastic/elasticsearch';
+import { getGameById, getGames } from './Routes/games';
+import { getPublishers } from './Routes/publishers';
+import { getDevelopers } from './Routes/developers';
+import { getTags } from './Routes/tags';
+import { getGenres } from './Routes/genres';
+import { getPlatforms } from './Routes/platforms';
 
 const app = express();
 const port = 5000; // Server's port
@@ -19,249 +19,27 @@ app.listen( port, () => {
     console.log( `server started at http://localhost:${ port }` );
 });
 
-// ------------- GAMES -------------------
-const getGames = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    const name: string = req.query.name ? req.query.name : "";
-    const filters: Filters = req.body;
-
-    let request: {} = {};
-
-    if (name !== "") {
-        request = requestGamesByName(page, name);
-    } else {
-        request = requestGames(page, filters);
-    }
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Game[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        console.log(error.meta.body.error);
-        res.status(404).send("Not found");
-    });
-};
-
-const getGameById = (req: any, res: any) => {
-    const id: number = req.params.id;
-
-    client.search(requestGameById(id)).then(function(response) {
-        const results: [] = response.body.hits.hits;
-        const formattedResult: Game = {};
-        
-        results.forEach((res: any) => {
-            Object.assign(formattedResult, res._source);
-        });
-
-        if (Object.keys(formattedResult).length !== 0) {
-            res.status(200).send(formattedResult);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-}
-
-
-// ------------- PUBLISHERS -------------------
-const getPublishers = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    const name: string = req.query.name ? req.query.name : "";
-    let request: {} = {};
-    
-    if (name !== "") {
-        request = requestPublishersByName(page, name);
-    } else {
-        request = requestPublishers(page);
-    }
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Publisher[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-};
-
-
-// ------------- DEVELOPERS -------------------
-const getDevelopers = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    const name: string = req.query.name ? req.query.name : "";
-    let request: {} = {};
-    
-    if (name !== "") {
-        request = requestDevelopersByName(page, name);
-    } else {
-        request = requestDevelopers(page);
-    }
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Developer[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-};
-
-// ------------- TAGS -------------------
-const getTags = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    const name: string = req.query.name ? req.query.name : "";
-    let request: {} = {};
-    
-    if (name !== "") {
-        request = requestTagsByName(page, name);
-    } else {
-        request = requestTags(page);
-    }
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Tag[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-};
-
-
-// ------------- CATEGORIES -------------------
-const getCategories = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    let request: {} = {};
-    
-    request = requestCategories(page);
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Category[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-};
-
-// ------------- PLATFORMS -------------------
-const getPlatforms = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    let request: {} = {};
-    
-    request = requestPlatforms(page);
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Platform[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-};
-
-// ------------- GENRES -------------------
-const getGenres = (req: any, res: any) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    let request: {} = {};
-    
-    request = requestGenres(page);
-
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Platform[] = [];
-
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
-
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send("Not found");
-        }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
-};
-
 // --- ROUTES ----
 /* GAMES */
-app.post('/api/games', getGames);
-app.get('/api/games', getGames);
-app.get('/api/game/:id', getGameById);
+app.post('/api/games', (req, res) => { getGames(req, res, client); });
+app.get('/api/games', (req, res) => { getGames(req, res, client); });
+app.get('/api/game/:id', (req, res) => { getGameById(req, res, client); });
 
 /* PUBLISHERS */
-app.get('/api/publishers', getPublishers);
+app.get('/api/publishers', (req, res) => { getPublishers(req, res, client); });
 
 /* DEVELOPERS */
-app.get('/api/developers', getDevelopers);
+app.get('/api/developers', (req, res) => { getDevelopers(req, res, client); });
 
 /* TAGS */
-app.get('/api/tags', getTags);
+app.get('/api/tags', (req, res) => { getTags(req, res, client); });
 
 /* CATEGORIES */
-app.get('/api/categories', getCategories);
+app.get('/api/categories',  (req, res) => { getCategories(req, res, client); });
 
 /* PLATFORMS */
-app.get('/api/platforms', getPlatforms);
+app.get('/api/platforms', (req, res) => { getPlatforms(req, res, client); });
 
 /* GENRES */
-app.get('/api/genres', getGenres);
+app.get('/api/genres', (req, res) => { getGenres(req, res, client); });
 

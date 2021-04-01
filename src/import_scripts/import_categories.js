@@ -2,7 +2,6 @@ const neatCsv = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
 
-
 async function parse() {
     const csvPath = path.resolve('csv/steam.csv');
     const parserInfo = require('./steam.js');
@@ -18,7 +17,6 @@ async function parse() {
     }
     return Array.from(categoriesSet).map(categorieName => ({ name: categorieName }));
 }
-
 
 const dbIndexScheme = {
     index: 'project_s6_categories',
