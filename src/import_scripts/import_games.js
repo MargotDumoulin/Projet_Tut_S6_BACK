@@ -28,7 +28,7 @@ async function parse() {
             gamesObject = Object.assign(gamesObject, mergingObject);
         }
     }
-    return Object.values(gamesObject);
+    return Object.values(gamesObject).filter(game => game.name);
 }
 
 const dbIndexScheme = {
