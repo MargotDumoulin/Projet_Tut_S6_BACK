@@ -13,13 +13,13 @@ const client = new Client({ node: 'http://localhost:9200' });
 
 const imports = [
     gamesImport,
-    // publishersImport,
-    // developersImport,
-    // categoriesImport,
-    // genresImport,
-    // platformsImport,
-    // tagsImport,
-    // agesImport
+    publishersImport,
+    developersImport,
+    categoriesImport,
+    genresImport,
+    platformsImport,
+    tagsImport,
+    agesImport
 ];
 
 // Inserts data into ElasticSearch
