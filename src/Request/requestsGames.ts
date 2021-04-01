@@ -76,7 +76,7 @@ export const requestGames = (page: number, filters: Filters) => {
         }));
     }
 
-    return {
+    const request = {
         index: 'project_s6_games',
         body: {
             "from": ((page * 10) - 10),
@@ -130,6 +130,8 @@ export const requestGames = (page: number, filters: Filters) => {
             }
         }  
     }
+
+    return request;
 }
 
 export const requestGameById = (id: number) => {
