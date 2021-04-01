@@ -140,6 +140,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete Ages",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_required_ages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_required_ages"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -286,6 +305,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search Ages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_required_ages/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_required_ages",
+								"_search"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -299,7 +338,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/publishers?name=val&page=1",
+							"raw": "http://{{localhost}}/api/publishers?name=d-pad stodio",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -311,11 +350,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "val"
-								},
-								{
-									"key": "page",
-									"value": "1"
+									"value": "d-pad stodio"
 								}
 							]
 						}
@@ -328,7 +363,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/games?name=Counter-Strike: Condi",
+							"raw": "http://{{localhost}}/api/games?name=countor-strike",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -340,7 +375,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "Counter-Strike: Condi"
+									"value": "countor-strike"
 								}
 							]
 						}
@@ -353,7 +388,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/developers?name=val&page=1",
+							"raw": "http://{{localhost}}/api/developers?name=vis - v",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -365,11 +400,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "val"
-								},
-								{
-									"key": "page",
-									"value": "1"
+									"value": "vis - v"
 								}
 							]
 						}
@@ -439,7 +470,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/game/10",
+							"raw": "http://{{localhost}}/api/game/459580",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -447,7 +478,7 @@
 							"path": [
 								"api",
 								"game",
-								"10"
+								"459580"
 							]
 						}
 					},
@@ -546,6 +577,82 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/categories",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Platforms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/platforms",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"platforms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Genres",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/genres",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/ages",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"ages"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -560,7 +667,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Counter-Strike: Condition\"\n}",
+							"raw": "{\n    \"required_age\": [\"18\", \"0\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -576,6 +683,44 @@
 							"path": [
 								"api",
 								"games"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get Number of Pages",
+			"item": [
+				{
+					"name": "[Games] Get number of pages ",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"bool\": {\n            \"must\": [\n                {\n                    \"wildcard\": {\n                        \"name\": {\n                            \"value\": \"Counter-Strike*\"\n                        }\n                    }\n                }\n            ],\n            \"filter\": [\n                {\n                    \"script\": {\n                        \"script\": {\n                            \"source\": \"(doc['positive_ratings'].size() > 0 && doc['negative_ratings'].size() > 0) \\n                            && (\\n                                    doc['positive_ratings'].value * 100 / (doc['positive_ratings'].value + doc['negative_ratings'].value)\\n                                ) >= params['positive_rating_percent']\",\n                            \"params\": {\n                                \"positive_rating_percent\": 80\n                            },\n                            \"lang\": \"painless\"\n                        }\n                    }\n                }\n            ]\n        }\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/project_s6_games/_count",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_games",
+								"_count"
 							]
 						}
 					},
