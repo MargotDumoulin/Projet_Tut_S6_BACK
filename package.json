@@ -7,7 +7,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon -e ts -w ./src -x yarn start",
-    "import-data": "node import_scripts/import.js",
+    "import-data": "node src/import_scripts/import.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

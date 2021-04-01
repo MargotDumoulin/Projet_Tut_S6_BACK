@@ -7,6 +7,7 @@ import { getDevelopers } from './Routes/developers';
 import { getTags } from './Routes/tags';
 import { getGenres } from './Routes/genres';
 import { getPlatforms } from './Routes/platforms';
+import { getAges } from './Routes/ages';
 
 const app = express();
 const port = 5000; // Server's port
@@ -42,4 +43,7 @@ app.get('/api/platforms', (req, res) => { getPlatforms(req, res, client); });
 
 /* GENRES */
 app.get('/api/genres', (req, res) => { getGenres(req, res, client); });
+
+/* AGES */
+app.get('/api/ages', (req, res) => { getAges(req, res, client); });
 

@@ -6,6 +6,7 @@ const genresImport = require('./import_genres.js');
 const platformsImport = require('./import_platforms.js');
 const tagsImport = require('./import_tags.js');
 const gamesImport = require('./import_games.js');
+const agesImport = require('./import_required_ages');
 const { parserInfo } = require('./steam.js');
 
 const client = new Client({ node: 'http://localhost:9200' });
@@ -17,7 +18,8 @@ const imports = [
     categoriesImport,
     genresImport,
     platformsImport,
-    tagsImport
+    tagsImport,
+    agesImport
 ];
 
 // Inserts data into ElasticSearch
