@@ -473,8 +473,10 @@ type Game = {
     support_email: string,
 } | {};
 
-type CompleteUser = {
+type User = {
     lastname: string,
-    firstName: string,
-    email: string
-} | {};
+    firstname: string,
+    email: string,
+    password: string,
+    confirmPassword?: string
+};

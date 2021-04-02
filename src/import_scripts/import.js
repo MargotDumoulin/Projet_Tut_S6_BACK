@@ -12,13 +12,13 @@ const { parserInfo } = require('./steam.js');
 const client = new Client({ node: 'http://localhost:9200' });
 
 const imports = [
-    gamesImport,
-    publishersImport,
-    developersImport,
-    categoriesImport,
-    genresImport,
-    platformsImport,
-    tagsImport,
+    // gamesImport,
+    // publishersImport,
+    // developersImport,
+    // categoriesImport,
+    // genresImport,
+    // platformsImport,
+    // tagsImport,
     agesImport
 ];
 
@@ -78,4 +78,29 @@ async function insertData(dataset, dbIndexScheme) {
     }
 
     console.log('++++++ Done.\n');
+    createUsersIndex();
 })();
+
+const createUsersIndex = () => {
+    client.indices.create({
+        index: "project_s6_users",
+        body: {
+            mappings: {
+                properties: {
+                    firstname: { type: 'text' },
+                    lastname: { type: 'text' },
+                    email: { type: 'keyword' },
+                    password: { type: 'text' },
+                    library: { type: 'object' }
+                }
+            }
+        } 
+    })
+    .then(() => {
+        console.log('++++++ Users table created.\n')
+    })
+    .catch(() => {
+        console.log('------ Error while trying to create USERS table. \n')
+    });
+}   
+
