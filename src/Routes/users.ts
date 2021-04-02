@@ -36,6 +36,23 @@ export const isLoginInfoCorrect = (req: any, res: any, client: Client) => {
     }
 }
 
+export const isTokenValid = (req: any, res: any, client: Client) => {
+    const token: string = req?.body?.token;
+    const publicKey = fs.readFileSync('config/keys/public.pem');
+
+    if (token) {
+        jwt.verify(token, publicKey, (error: any, decoded: any) => {
+            if (decoded && decoded.email) {
+                res.status(200).send('OK');
+            } else {
+                res.status(403).send('Not allowed');
+            }
+        })
+    } else {
+        res.status(403).send('Not allowed');
+    }
+}
+
 export const createUser = (req: any, res: any, client: Client) => {
     const user: User = {
         firstname: req.body.lastname,
