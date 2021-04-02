@@ -2,6 +2,8 @@ import { Client } from "@elastic/elasticsearch";
 import { requestUser } from "../Request/requestsUsers";
 import { requestUsers } from '../Request/requestsUsers';
 import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+import fs from 'fs';
 
 export const isLoginInfoCorrect = (req: any, res: any, client: Client) => {
     const email: string = req?.body?.email;
@@ -16,12 +18,15 @@ export const isLoginInfoCorrect = (req: any, res: any, client: Client) => {
                 const isPasswordValid = await argon2.verify(userResult.password, password);
 
                 if (isPasswordValid) {
-                    res.status(200).send('OK');
+                    const privateKey = fs.readFileSync('config/keys/private.pem');
+                    const token = jwt.sign({ email }, privateKey, { algorithm: 'RS256' });
+                    res.status(200).send({ token });
                 } else {
                     res.status(403).send('Not allowed');
                 }
+            } else {
+                res.status(403).send('Not allowed');
             }
-            res.status(403).send('Not allowed');
         }).catch(function (error) {
             console.log(error);
             res.status(500).send('Internal Server Error');
@@ -29,7 +34,6 @@ export const isLoginInfoCorrect = (req: any, res: any, client: Client) => {
     } else {
         res.status(400).send('Bad Request');
     }
-    
 }
 
 export const createUser = (req: any, res: any, client: Client) => {
