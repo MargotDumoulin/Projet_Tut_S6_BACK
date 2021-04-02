@@ -7,14 +7,17 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon -e ts -w ./src -x yarn start",
+    "import-data": "node src/import_scripts/import.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.11.0",
     "@types/elasticsearch": "^5.0.37",
-    "crypto-random-string": "^3.3.1",
-    "csv-parser": "^3.0.0",
-    "express": "^4.17.1"
+    "@types/node-fetch": "^2.5.8",
+    "express": "^4.17.1",
+    "json5": "^2.2.0",
+    "neat-csv": "^6.0.1",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
