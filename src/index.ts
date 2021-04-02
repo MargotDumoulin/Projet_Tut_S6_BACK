@@ -86,35 +86,30 @@ const getGameById = (req: any, res: any) => {
     });
 }
 
-// TODO : Create an appropriate folder/file
-const get1user = (req: any, res: any) => {
-    const email: string = req.query.email;
-    const password: string = req.query.password;
-    client.search({
-        index: [
-            'project_s6_users',
-        ],
-        body: {
-            from: 0,
-            size: 1,
-            query: {
-                bool: {
-                    must: [
-                        {
-                            match: {
-                                email: email
+function searchUser(email: string, password: string, req: any, res: any) {
+    return client.search(
+        {
+            index: [
+                'project_s6_users',
+            ],
+            body: {
+                from: 0,
+                size: 1,
+                query: {
+                    bool: {
+                        must: [
+                            {
+                                match: { "email": email }
+                            },
+                            {
+                                match: { "password": password }
                             }
-                        },
-                        {
-                            match: {
-                                password: password
-                            }
-                        }
-                    ]
+                        ]
+                    }
                 }
             }
         }
-    }).then(function (response) {
+    ).then(function (response) {
         const results: [] = response.body.hits.hits;
         const formattedResult: CompleteUser = {};
         // CompleteUser return password, find way to remove it 
@@ -134,16 +129,24 @@ const get1user = (req: any, res: any) => {
             user.token = res._source['token'];
             Object.assign(formattedResult, res._source);
         });
+        console.log(user);
         if (Object.keys(formattedResult).length !== 0) {
-            // res.status(200).send(formattedResult);
-            res.status(200).send(user);
+            res.send(user);
         } else {
-            res.status(404).send("Invalid credentials");
+            res.send(null);
         }
     }).catch(function (error) {
         console.log(error);
-        res.status(404).send("Invalid credential");
+        res.send(error);
     });
+}
+
+
+// TODO : Create an appropriate folder/file
+const get1user = (req: any, res: any) => {
+    const email: string = req.query.email;
+    const password: string = req.query.password;
+    searchUser(email, password, req, res);
 
 }
 
@@ -153,7 +156,7 @@ const create1user = (req: any, res: any) => {
     const email = req.query.email;
     const password = req.query.password;
     const confirm_password = req.query.confirm_password;
-    const token: string = cryptoRandomString({length: 10, type: 'url-safe'});
+    const token: string = cryptoRandomString({ length: 10, type: 'url-safe' });
     let emailUsed: boolean = false;
     let samePassword: boolean = true;
 
@@ -180,20 +183,20 @@ const create1user = (req: any, res: any) => {
 
         // EMAIL : send error message 
         if (emailUsed === true) {
-            res.status(401).send("Email already used !");
+            res.send("Email already used !");
         }
 
-        if (password.length <= 7 ){
-            res.status(401).send("Passwords is too short !");
+        if (password.length <= 7) {
+            res.send("Passwords is too short !");
         }
         // PASSWORD : password verification if they match
         if (password !== confirm_password) {
             samePassword = false;
-            res.status(401).send("Passwords are not the same !");
+            res.send("Passwords are not the same !");
         }
 
         // EMAIL & PASSWORD : double verif : maybe useless ?  
-        if ((samePassword === true) && (emailUsed === false) && (password.length > 7 )) {
+        if ((samePassword === true) && (emailUsed === false) && (password.length > 7)) {
             client.index({
                 index: "project_s6_users",
                 body: {
@@ -204,11 +207,18 @@ const create1user = (req: any, res: any) => {
                     "token": token  // string with a length of 10 random char (a-Z0-9*) 
                 }
             });
-            res.status(200).send("Your account has been created !");
+            // .then(function (response) {
+            //     console.log(response);
+            //     searchUser(email, password, req, res);
+            //     console.log("after rep et search");
+            // });
+            // log the user after create his account
+            res.send("Your account has been created !");
         }
+
     }).catch(function (error) {
         console.log(error);
-        res.status(404).send("Not Found");
+        res.send("Not Found");
     });
 
     // if we put the 2 block "PASSWORD" and "EMAIL & PASWWORD" here, they are executed before the elastic response
