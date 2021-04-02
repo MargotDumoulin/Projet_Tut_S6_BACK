@@ -70,7 +70,7 @@ type Filters = {
     required_age?: number[] | undefined,
     positive_rating_percent?: number | undefined,
     sort?: SortFilter | undefined
-} | undefined;
+};
 
 type Game = {
     id: number,
