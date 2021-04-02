@@ -82,9 +82,24 @@ export const requestGames = (page: number, filters: Filters) => {
             "from": ((page * 10) - 10),
             "size": 10,
             sort: [
-                {
+                ...((filters.sort && filters.sort.sortBy === 'release_date') ? [{
+                    release_date: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'developer') ? [{
+                    developer: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'publisher') ? [{
+                    publisher: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'name') ? [{
+                    name: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'required_age') ? [{
+                    release_date: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...(!filters.sort ? [{
                     release_date: { "order" : "desc" }
-                }
+                }] : [])
             ],
             query: {
                 bool: {
