@@ -12,13 +12,13 @@ const { parserInfo } = require('./steam.js');
 const client = new Client({ node: 'http://localhost:9200' });
 
 const imports = [
-    // gamesImport,
-    // publishersImport,
-    // developersImport,
-    // categoriesImport,
-    // genresImport,
-    // platformsImport,
-    // tagsImport,
+    gamesImport,
+    publishersImport,
+    developersImport,
+    categoriesImport,
+    genresImport,
+    platformsImport,
+    tagsImport,
     agesImport
 ];
 
@@ -90,7 +90,7 @@ const createUsersIndex = () => {
                     firstname: { type: 'text' },
                     lastname: { type: 'text' },
                     email: { type: 'keyword' },
-                    password: { type: 'text' },
+                    password: { type: 'keyword' },
                     library: { type: 'object' }
                 }
             }

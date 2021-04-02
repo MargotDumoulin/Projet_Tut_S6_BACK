@@ -1,47 +1,35 @@
-import { requestIsLoginInfoCorrect } from './../Request/requestsUsers';
 import { Client } from "@elastic/elasticsearch";
 import { requestUser } from "../Request/requestsUsers";
 import { requestUsers } from '../Request/requestsUsers';
 import argon2 from 'argon2';
 
 export const isLoginInfoCorrect = (req: any, res: any, client: Client) => {
-    const email: string = req.body.email;
-    const password: string = req.body.password;
+    const email: string = req?.body?.email;
+    const password: string = req?.body?.password;
 
-    client.search(
-        requestIsLoginInfoCorrect(email, password)
-    ).then((res: any) => {
-        // TODO : REWRITE THIS PORTION OF CODE !!!!!!!!!!! 
-        // const results: [] = res.body.hits.hits;
-        // const formattedResult: User | {} = {};
-        // // User return password, find way to remove it 
-        // // TODO : To review and update
-        // // vv temporary patch
-        // const user = {
-        //     lastname: false,
-        //     firstname: false,
-        //     email: false,
-        //     token: false
-        // }
+    if (email && password) {
+        client.search(
+            requestUser(email)
+        ).then(async (response: any) => {
+            if (response.body.hits.hits.length > 0) {
+                const userResult: User = response.body.hits.hits[0]._source;
+                const isPasswordValid = await argon2.verify(userResult.password, password);
 
-        // results.forEach((res: any) => {
-        //     user.lastname = res._source['lastname'];
-        //     user.firstname = res._source['firstname'];
-        //     user.email = res._source['email'];
-        //     user.token = res._source['token'];
-
-        //     Object.assign(formattedResult, res._source);
-        // });
-        // console.log(user);
-        // if (Object.keys(formattedResult).length !== 0) {
-        //     res.send(user);
-        // } else {
-        //     res.send(null);
-        // }
-    }).catch(function (error) {
-        console.log(error);
-        res.send(error);
-    });
+                if (isPasswordValid) {
+                    res.status(200).send('OK');
+                } else {
+                    res.status(403).send('Not allowed');
+                }
+            }
+            res.status(403).send('Not allowed');
+        }).catch(function (error) {
+            console.log(error);
+            res.status(500).send('Internal Server Error');
+        });
+    } else {
+        res.status(400).send('Bad Request');
+    }
+    
 }
 
 export const createUser = (req: any, res: any, client: Client) => {
@@ -64,8 +52,6 @@ export const createUser = (req: any, res: any, client: Client) => {
         if (results.length > 0) isEmailTaken = true;
         const isValid: boolean = isUserValid(user);
 
-        console.log(results);
-        console.log(isEmailTaken);
         if (isValid && !isEmailTaken) {
             delete user.confirmPassword;
 

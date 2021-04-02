@@ -19,30 +19,6 @@ export const requestUser = (email: string) => {
     }
 };
 
-export const requestIsLoginInfoCorrect = (email: string, password: string) => {
-    return {
-        index: [
-            'project_s6_users',
-        ],
-        body: {
-            from: 0,
-            size: 1,
-            query: {
-                bool: {
-                    must: [
-                        {
-                            match: { 'email': email }
-                        },
-                        {
-                            match: { 'password': password }
-                        }
-                    ]
-                }
-            }
-        }
-    }
-}
-
 export const requestUsers = (page: number) => {
     return {
         index: 'project_s6_users',
