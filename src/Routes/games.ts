@@ -25,7 +25,7 @@ export const getGames = async (req: any, res: any, client: Client) => {
 
         results.forEach((res: any) => {
             const game: Game = parseIntoGameType(res._source);
-            formattedResults.push(game);
+            formattedResults.push({ ...game, required_age: Number(game.required_age) });
         });
 
         if (Object.keys(formattedResults).length !== 0) {
@@ -44,14 +44,15 @@ export const getGameById = (req: any, res: any, client: Client) => {
 
     client.search(requestGameById(id)).then(function(response) {
         const results: [] = response.body.hits.hits;
-        const formattedResult: Game = {};
+        const formattedResult: Game | {} = {};
         
         results.forEach((res: any) => {
             Object.assign(formattedResult, res._source);
         });
 
         if (Object.keys(formattedResult).length !== 0) {
-            res.status(200).send(formattedResult);
+            const game: Game = parseIntoGameType(formattedResult);
+            res.status(200).send({ ...game, required_age: Number(game.required_age) });
         } else {
             res.status(404).send("Not found");
         }
@@ -80,7 +81,7 @@ export const countNumberOfResults = async (request: any) => {
 
 const parseIntoGameType = (obj: any): Game => {
     const scheme: any = gamesImport.dbIndexScheme.body.mappings.properties;
-    const typedObject: Game = {}; 
+    const typedObject: Game | {} = {}; 
 
     for (let key in obj) {
         switch(scheme[key].type) {
@@ -101,5 +102,5 @@ const parseIntoGameType = (obj: any): Game => {
                 break;
         }
     }
-    return typedObject;
+    return typedObject as Game;
 }

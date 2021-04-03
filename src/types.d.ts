@@ -471,7 +471,7 @@ type Game = {
     website: string,
     support_url: string,
     support_email: string,
-} | {};
+};
 
 type User = {
     lastname: string,

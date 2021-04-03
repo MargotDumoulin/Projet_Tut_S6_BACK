@@ -888,6 +888,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Is Email Taken",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/user/email?email=t@gmail.com",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"email"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "t@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}

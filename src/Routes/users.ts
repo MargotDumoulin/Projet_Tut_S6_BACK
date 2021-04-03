@@ -125,6 +125,30 @@ export const getUsers = (req: any, res: any, client: Client) => {
     });
 }
 
+export const isEmailTaken = (req: any, res: any, client: Client) => {
+    const email: string = req?.query?.email ? req.query.email : undefined;
+
+    if (!email || email.length <= 0 || email === '""') { 
+        res.status(400).send('Bad Request'); 
+    } else {
+        client.search(
+            requestUser(email)
+        ).then((response: any) => {
+            const results: [] = response.body.hits.hits;
+            let isEmailTaken: boolean = false;
+            
+            if (results.length > 0) {
+                res.status(409).send('Email already exists.');
+            } else {
+                res.status(200).send('Email does not exist yet.');
+            }
+        }).catch(function (error) {
+            console.log(error);
+            res.status(500).send('Internal Server Error');
+        });
+    }
+}
+
 const isUserValid = (user: User): boolean => {
     let errors: number = 0;
     let numberOfFields: number = 0; // To check if one is missing :)
