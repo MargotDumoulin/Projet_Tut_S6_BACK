@@ -32,8 +32,8 @@ export const requestTags = (page: number) => {
     return {
         index: 'project_s6_tags',
         body: {
-            "from": ((page * 10) - 10),
-            "size": 10
+            "from": 0,
+            "size": 400
         }  
     }
 }
