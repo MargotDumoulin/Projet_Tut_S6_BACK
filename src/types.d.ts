@@ -473,3 +473,8 @@ type Game = {
     support_email: string,
 } | {};
 
+type FullTag = {
+    name: string,
+    value?: string
+}
+

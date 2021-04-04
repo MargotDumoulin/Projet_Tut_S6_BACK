@@ -11,23 +11,38 @@ export const getTags = (req: any, res: any, client: Client) => {
     if (name !== "") {
         request = requestTagsByName(page, name);
     } else if (value !== "") {
-        request = requestTagsByValue(page, value);
+        request = requestTagsByValue(value);
     } else {
         request = requestTags(page);
     }
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: Tag[] = [];
 
-        results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
+        if (value !== "") {
+            let formattedResults: FullTag | {} = {};
 
-        if (Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
+            results.forEach((res: any) => {
+                formattedResults = res._source;
+            });
+
+            if (response.body.hits.hits.length !== 0) {
+                res.status(200).send(formattedResults);
+            } else {
+                res.status(404).send("Not found");
+            }
         } else {
-            res.status(404).send("Not found");
+            let formattedResults: FullTag[] = [];
+
+            results.forEach((res: any) => {
+                formattedResults.push(res._source);
+            });
+
+            if (Object.keys(formattedResults).length !== 0) {
+                res.status(200).send(formattedResults);
+            } else {
+                res.status(404).send("Not found");
+            }
         }
     }).catch(function (error) {
         res.status(404).send("Not found");

@@ -40,7 +40,7 @@ async function parse() {
                                         .replace(/'/g, "");
 
         // We allow a Levenshtein distance of maximum 15 % of the tag length (-4 is because there's always tag_)
-        const maxLevenshteinDistance = Math.round((transformTag.length - 4) * 0.15);
+        const maxLevenshteinDistance = Math.round((transformTag.length - 4) * 0.08);
         // Check if tag exists with Levenshtein algorithm
         const rightTag = Object.keys(tagsFormat).find(tag => levenshtein(tag, transformTag) <= maxLevenshteinDistance);
 

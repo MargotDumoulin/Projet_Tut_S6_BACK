@@ -28,7 +28,7 @@ export const requestTagsByName = (page: number, nameGiven: string) => {
     }
 }
 
-export const requestTagsByValue = (page: number, valueGiven: string) => {
+export const requestTagsByValue = (valueGiven: string) => {
     return {
         index: [
             'project_s6_tags',
