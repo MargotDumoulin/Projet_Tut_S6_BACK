@@ -1,14 +1,17 @@
 import { Client } from '@elastic/elasticsearch';
-import { requestTagsByName, requestTags } from '../Request/requestsTags';
+import { requestTagsByName, requestTags, requestTagsByValue } from '../Request/requestsTags';
 
 // ------------- TAGS -------------------
 export const getTags = (req: any, res: any, client: Client) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
     const name: string = req.query.name ? req.query.name : "";
+    const value: string = req.query.value ? req.query.value : "";
     let request: {} = {};
     
     if (name !== "") {
         request = requestTagsByName(page, name);
+    } else if (value !== "") {
+        request = requestTagsByValue(page, value);
     } else {
         request = requestTags(page);
     }
