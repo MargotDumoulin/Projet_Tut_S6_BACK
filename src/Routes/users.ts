@@ -37,7 +37,7 @@ export const createUser = (req: any, res: any, client: Client) => {
             
             client.index({
                 index: "project_s6_users",
-                body: { ...user, password: hashedPassword, library: [] }
+                body: { ...user, password: hashedPassword }
             }).then(() => {
                 res.status(200).send('OK');
             }).catch(() => {
@@ -104,7 +104,49 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                     .then(() => { res.status(200).send('OK')})
                     .catch((error) => { 
                         console.log(error); 
-                        console.log(error.meta.body.error);
+                        res.status(500).send('Internal Server Error'); })
+                    
+                } else {
+                    // The email is not valid (user does not exist)
+                    res.status(403).send('Not allowed');
+                }
+            })
+            .catch(() => { console.log('lalo'); res.status(500).send('Internal Server Error'); })
+        } else {
+            res.status(403).send('Not allowed');
+        }
+    });
+};
+
+export const removeFromLibrary = (req: any, res: any, client: Client) => {
+    const gameId: number = req?.body?.gameId;
+    const token: string = req?.body?.token;
+    const publicKey = fs.readFileSync('config/keys/public.pem');
+
+    jwt.verify(token, publicKey, (error: any, decoded: any) => {
+        if (decoded && decoded.email) {
+            console.log(decoded.email)
+            // The token is valid, let's search for the users already existing library
+            client.search(requestUser(decoded.email))
+            .then((response) => {
+                if (response.body.hits.hits.length > 0) {
+                    const userId: string = response.body.hits.hits[0]._id;
+                    const userResult: User = response.body.hits.hits[0]._source;
+                    
+                    const newLibrary = userResult.library?.length === 1 ? undefined : userResult.library?.filter((game: Game) => gameId !== game.id);
+
+                    client.update({
+                        index: 'project_s6_users',
+                        id: userId,
+                        body: {
+                            doc: {
+                                library: newLibrary
+                            }
+                        }
+                    })
+                    .then(() => { res.status(200).send('OK')})
+                    .catch((error) => { 
+                        console.log(error); 
                         res.status(500).send('Internal Server Error'); })
                     
                 } else {
