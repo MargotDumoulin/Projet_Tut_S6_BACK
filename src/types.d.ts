@@ -477,5 +477,12 @@ type Game = {
     website: string,
     support_url: string,
     support_email: string,
-} | {};
+};
 
+type User = {
+    lastname: string,
+    firstname: string,
+    email: string,
+    password: string,
+    confirmPassword?: string
+};
