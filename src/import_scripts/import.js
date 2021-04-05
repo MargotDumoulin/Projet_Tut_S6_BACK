@@ -12,14 +12,14 @@ const config = require('../config.json');
 const client = new Client({ node: `http://localhost:${config.elasticSearchPort}` });
 
 const imports = [
-    gamesImport,
-    publishersImport,
-    developersImport,
-    categoriesImport,
-    genresImport,
-    platformsImport,
+    // gamesImport,
+    // publishersImport,
+    // developersImport,
+    // categoriesImport,
+    // genresImport,
+    // platformsImport,
     tagsImport,
-    agesImport
+    // agesImport
 ];
 
 // Inserts data into ElasticSearch
@@ -91,16 +91,17 @@ const createUsersIndex = () => {
                     lastname: { type: 'text' },
                     email: { type: 'keyword' },
                     password: { type: 'keyword' },
-                    library: { type: 'object' }
+                    library: { type: 'integer' }
                 }
             }
         } 
     })
     .then(() => {
-        console.log('++++++ Users table created.\n')
+        console.log('++++++ Users table created.\n');
     })
-    .catch(() => {
-        console.log('------ Error while trying to create USERS table. \n')
+    .catch((error) => {
+        console.log(error.meta.body.error);
+        console.log('------ Error while trying to create USERS table. \n');
     });
 }   
 

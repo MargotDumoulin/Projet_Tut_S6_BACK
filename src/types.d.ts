@@ -488,9 +488,11 @@ type User = {
     firstname: string,
     email: string,
     password: string,
-    confirmPassword?: string
+    confirmPassword?: string,
+    library?: number[] | null
 };
+
 type FullTag = {
     name: string,
     value?: string
-}
+};
