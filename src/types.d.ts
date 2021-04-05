@@ -486,3 +486,7 @@ type User = {
     password: string,
     confirmPassword?: string
 };
+type FullTag = {
+    name: string,
+    value?: string
+}

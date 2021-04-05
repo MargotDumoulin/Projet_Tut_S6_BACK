@@ -17,6 +17,7 @@
     "@types/node-fetch": "^2.5.8",
     "argon2": "^0.27.2",
     "express": "^4.17.1",
+    "js-levenshtein": "^1.1.6",
     "json5": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "neat-csv": "^6.0.1",
