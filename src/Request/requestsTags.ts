@@ -28,6 +28,28 @@ export const requestTagsByName = (page: number, nameGiven: string) => {
     }
 }
 
+export const requestTagsByValue = (valueGiven: string) => {
+    return {
+        index: [
+            'project_s6_tags',
+        ],
+        body: {
+            query: {
+                constant_score: {
+                    filter: {
+                        term: {
+                            value: {
+                                value: valueGiven
+                            }
+                        }
+                    }
+                }
+            }    
+        }  
+    }
+}
+
+
 export const requestTags = (page: number) => {
     return {
         index: 'project_s6_tags',

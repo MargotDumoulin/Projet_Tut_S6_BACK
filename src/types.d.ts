@@ -72,6 +72,10 @@ type Filters = {
     sort?: SortFilter | undefined
 };
 
+type TagFilter = {
+    tags: string[]
+}
+
 type Game = {
     id: number,
     name: string,
@@ -487,3 +491,7 @@ type User = {
     confirmPassword?: string,
     library?: Game[]
 };
+type FullTag = {
+    name: string,
+    value?: string
+}
