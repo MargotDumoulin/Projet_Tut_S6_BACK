@@ -134,7 +134,7 @@ export const requestGames = (page: number, filters: Filters) => {
     return request;
 }
 
-export const requestGamesByTags = (tagFilter: TagFilter) => {
+export const requestGamesByTags = (tagFilter: TagFilter, id: number) => {
 
     const tagsFilter = tagFilter.tags.map(tag => ({
         match: {
@@ -163,6 +163,13 @@ export const requestGamesByTags = (tagFilter: TagFilter) => {
                 bool: {
                     must: [
                         ...(tagsFilter ? tagsFilter : []),
+                    ],
+                    must_not: [
+                        {
+                            match: {
+                                id: id
+                            }
+                        }
                     ]
                 },
                 
@@ -170,7 +177,6 @@ export const requestGamesByTags = (tagFilter: TagFilter) => {
         }  
     }
 
-    console.log(request.body.sort);
     return request;
 }
 

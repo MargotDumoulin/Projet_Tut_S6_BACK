@@ -63,8 +63,9 @@ export const getGameById = (req: any, res: any, client: Client) => {
 
 export const getRelatedGames = async (req: any, res: any, client: Client) => {
     const tagFilter: TagFilter = req.body;
+    const id: number = req.params.id;
 
-    const request = requestGamesByTags(tagFilter);
+    const request = requestGamesByTags(tagFilter, id);
 
     client.search(request).then(function(response) {
         const results: {}[] = response.body.hits.hits;
@@ -81,7 +82,7 @@ export const getRelatedGames = async (req: any, res: any, client: Client) => {
             res.status(404).send("Not found");
         }
     }).catch(function (error) {
-        console.log(error?.meta?.body?.error.failed_shards[0].reason);
+        console.log(error?.meta?.body?.error);
         res.status(404).send("Not found");
     });
 }

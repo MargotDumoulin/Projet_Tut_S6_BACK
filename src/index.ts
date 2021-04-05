@@ -24,7 +24,7 @@ app.listen( port, () => {
 /* GAMES */
 app.post('/api/games', (req, res) => { getGames(req, res, client); });
 app.get('/api/games', (req, res) => { getGames(req, res, client); });
-app.post('/api/games/tags', (req, res) => { getRelatedGames(req, res, client); });
+app.post('/api/games/related/:id', (req, res) => { getRelatedGames(req, res, client); });
 app.get('/api/game/:id', (req, res) => { getGameById(req, res, client); });
 
 /* PUBLISHERS */
