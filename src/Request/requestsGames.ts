@@ -158,7 +158,7 @@ export const requestGames = (page: number, filters: Filters) => {
     return request;
 }
 
-export const requestGamesByTags = (tagFilter: TagFilter, id: number) => {
+export const requestGamesByTags = (tagFilter: TagFilter, id: number = -1) => {
 
     const tagsFilter = tagFilter.tags.map(tag => ({
         match: {
