@@ -1,5 +1,5 @@
 import { Client } from "@elastic/elasticsearch";
-import { requestUser } from "../Request/requestsUsers";
+import { requestUser, requestLibrary } from "../Request/requestsUsers";
 import { requestUsers } from '../Request/requestsUsers';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
@@ -91,19 +91,28 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                 if (response.body.hits.hits.length > 0) {
                     const userId: string = response.body.hits.hits[0]._id;
                     const userResult: User = response.body.hits.hits[0]._source;
+
+                    let newLibrary;
+                    if (userResult.library) {
+                        userResult.library.push(game);
+                        newLibrary = userResult.library;
+                    } else {
+                        newLibrary = [game];
+                    }
                     
                     client.update({
                         index: 'project_s6_users',
                         id: userId,
                         body: {
                             doc: {
-                                library: userResult.library ? userResult.library.push(game) : [game]
+                                library: newLibrary
                             }
                         }
                     })
                     .then(() => { res.status(200).send('OK')})
                     .catch((error) => { 
                         console.log(error); 
+                        console.log(error.meta.body.error); 
                         res.status(500).send('Internal Server Error'); })
                     
                 } else {
@@ -125,7 +134,6 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
 
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
         if (decoded && decoded.email) {
-            console.log(decoded.email)
             // The token is valid, let's search for the users already existing library
             client.search(requestUser(decoded.email))
             .then((response) => {
@@ -155,6 +163,39 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
                 }
             })
             .catch(() => { console.log('lalo'); res.status(500).send('Internal Server Error'); })
+        } else {
+            res.status(403).send('Not allowed');
+        }
+    });
+};
+
+export const getLibrary = (req: any, res: any, client: Client) => {
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    const token: string = req?.body?.token;
+    const publicKey = fs.readFileSync('config/keys/public.pem');
+
+    jwt.verify(token, publicKey, (error: any, decoded: any) => {
+        if (decoded && decoded.email) {
+            const request = requestLibrary(page, decoded.email);
+            // The token is valid, let's search for the users already existing library
+            client.search(request).then((response) => {
+                const results: {}[] = response.body.hits.hits;
+                let formattedResults: Game[] = [];
+
+                results.forEach((res: any) => {
+                    formattedResults.push(res._source);
+                });
+
+                if (Object.keys(formattedResults).length !== 0) {
+                    res.status(200).send(formattedResults);
+                } else {
+                    res.status(404).send('Not found');
+                }
+            }).catch((error) => {
+                console.log(error);
+                console.log(error.meta.body.error);
+                res.status(500).send('Internal Server Error');
+            });
         } else {
             res.status(403).send('Not allowed');
         }

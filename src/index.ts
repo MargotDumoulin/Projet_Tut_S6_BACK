@@ -1,4 +1,4 @@
-import { isLoginInfoCorrect, createUser, getUsers, isTokenValid, isEmailTaken, addToLibrary, removeFromLibrary } from './Routes/users';
+import { isLoginInfoCorrect, createUser, getUsers, isTokenValid, isEmailTaken, addToLibrary, removeFromLibrary, getLibrary } from './Routes/users';
 import { getCategories } from './Routes/categories';
 import express from 'express';
 import { Client }  from '@elastic/elasticsearch';
@@ -51,11 +51,15 @@ app.get('/api/ages', (req, res) => { getAges(req, res, client); });
 /* USERS */
 app.post('/api/user/login', (req, res) => { isLoginInfoCorrect(req, res, client); });
 app.post('/api/user/create', (req, res) => { createUser(req, res, client); });
+app.post('/api/user/token', (req, res) => { isTokenValid(req, res, client); });
+app.get('/api/user/email', (req, res) => { isEmailTaken(req, res, client); });
+
 app.post('/api/user/library/add', (req, res) => { addToLibrary(req, res, client); });
 app.post('/api/user/library/remove', (req, res) => { removeFromLibrary(req, res, client); });
-app.post('/api/user/token', (req, res) => { isTokenValid(req, res, client); });
+app.post('/api/user/library', (req, res) => { getLibrary(req, res, client); });
+
 app.get('/api/users', (req, res) => { getUsers(req, res, client); });
-app.get('/api/user/email', (req, res) => { isEmailTaken(req, res, client); });
+
 
 
 
