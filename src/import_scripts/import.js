@@ -12,14 +12,14 @@ const { parserInfo } = require('./steam.js');
 const client = new Client({ node: 'http://localhost:9200' });
 
 const imports = [
-    // gamesImport,
-    // publishersImport,
-    // developersImport,
-    // categoriesImport,
-    // genresImport,
-    // platformsImport,
+    gamesImport,
+    publishersImport,
+    developersImport,
+    categoriesImport,
+    genresImport,
+    platformsImport,
     tagsImport,
-    // agesImport
+    agesImport
 ];
 
 // Inserts data into ElasticSearch
