@@ -12,13 +12,13 @@ const { parserInfo } = require('./steam.js');
 const client = new Client({ node: 'http://localhost:9200' });
 
 const imports = [
-    // gamesImport,
+    gamesImport,
     // publishersImport,
     // developersImport,
     // categoriesImport,
     // genresImport,
     // platformsImport,
-    tagsImport,
+    //tagsImport,
     // agesImport
 ];
 

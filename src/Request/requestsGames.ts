@@ -143,7 +143,14 @@ export const requestGamesByTags = (tagFilter: TagFilter) => {
             "size": 10,
             sort: [
                 {
-                    owners: { "order" : "desc" }
+                    "_script": {
+                        type: "number",
+                        script: {
+                            lang: "painless",
+                            source: `Double.parseDouble(/-/.split(doc['owners'].value)[1])`,
+                        },
+                        order: "desc"
+                    }
                 }
             ],
             query: {
@@ -161,6 +168,7 @@ export const requestGamesByTags = (tagFilter: TagFilter) => {
         }  
     }
 
+    console.log(request.body.sort);
     return request;
 }
 

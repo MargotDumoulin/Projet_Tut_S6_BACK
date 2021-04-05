@@ -81,7 +81,7 @@ export const getRelatedGames = async (req: any, res: any, client: Client) => {
             res.status(404).send("Not found");
         }
     }).catch(function (error) {
-        console.log(error?.meta?.body?.error);
+        console.log(error?.meta?.body?.error.failed_shards[0].reason);
         res.status(404).send("Not found");
     });
 }
