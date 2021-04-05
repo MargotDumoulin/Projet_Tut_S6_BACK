@@ -66,6 +66,10 @@ type Filters = {
     positive_rating_percent: number | undefined
 };
 
+type TagFilter = {
+    tags: string[]
+}
+
 type Game = {
     id: number,
     name: string,

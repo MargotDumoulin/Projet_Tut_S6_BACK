@@ -1,4 +1,4 @@
-import { requestGamesByName, requestGames, requestGameById } from '../Request/requestsGames';
+import { requestGamesByName, requestGames, requestGameById, requestGamesByTags } from '../Request/requestsGames';
 import { Client } from '@elastic/elasticsearch';
 import gamesImport from '../import_scripts/import_games';
 import fetch from 'node-fetch';
@@ -57,6 +57,31 @@ export const getGameById = (req: any, res: any, client: Client) => {
             res.status(404).send("Not found");
         }
     }).catch(function (error) {
+        res.status(404).send("Not found");
+    });
+}
+
+export const getRelatedGames = async (req: any, res: any, client: Client) => {
+    const tagFilter: TagFilter = req.body;
+
+    const request = requestGamesByTags(tagFilter);
+
+    client.search(request).then(function(response) {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: Game[] = [];
+
+        results.forEach((res: any) => {
+            const game: Game = parseIntoGameType(res._source);
+            formattedResults.push({ ...game, required_age: Number(game.required_age) });
+        });
+
+        if (Object.keys(formattedResults).length !== 0) {
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send("Not found");
+        }
+    }).catch(function (error) {
+        console.log(error?.meta?.body?.error);
         res.status(404).send("Not found");
     });
 }

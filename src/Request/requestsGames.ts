@@ -134,6 +134,37 @@ export const requestGames = (page: number, filters: Filters) => {
     return request;
 }
 
+export const requestGamesByTags = (tagFilter: TagFilter) => {
+
+    const request = {
+        index: 'project_s6_games',
+        body: {
+            "from": 0,
+            "size": 10,
+            sort: [
+                {
+                    owners: { "order" : "desc" }
+                }
+            ],
+            query: {
+                bool: {
+                    filter: [
+                        ...(tagFilter.tags ? [{
+                            terms: {
+                                steamspy_tags: tagFilter.tags
+                            }
+                        }] : [])
+                    ],
+                },
+                
+            }
+        }  
+    }
+
+    return request;
+}
+
+
 export const requestGameById = (id: number) => {
     return {
         index: [
