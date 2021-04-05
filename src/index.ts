@@ -12,13 +12,14 @@ import { getAges } from './Routes/ages';
 
 const app = express();
 const port = 5000; // Server's port
+const elasticSearchPort = 9200; // Replace this var if your ElasticSearch server is not launching on port 9200
 
-const client = new Client({ node: 'http://localhost:9200' }); // ElasticSearch client
+const client = new Client({ node: `http://localhost:${elasticSearchPort}` }); // ElasticSearch client
 
 // start the Express server
 app.use(express.json());
 app.listen( port, () => {
-    console.log( `server started at http://localhost:${ port }` );
+    console.log( `server started at http://localhost:${port}` );
 });
 
 // --- ROUTES ----

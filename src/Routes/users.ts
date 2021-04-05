@@ -135,7 +135,6 @@ export const isEmailTaken = (req: any, res: any, client: Client) => {
             requestUser(email)
         ).then((response: any) => {
             const results: [] = response.body.hits.hits;
-            let isEmailTaken: boolean = false;
             
             if (results.length > 0) {
                 res.status(409).send('Email already exists.');
