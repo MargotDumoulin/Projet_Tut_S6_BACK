@@ -2,6 +2,7 @@ import { requestGamesByName, requestGames, requestGameById, requestGamesByTags }
 import { Client } from '@elastic/elasticsearch';
 import gamesImport from '../import_scripts/import_games';
 import fetch from 'node-fetch';
+import config from '../config.json';
 
 export const getGames = async (req: any, res: any, client: Client) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
@@ -89,7 +90,7 @@ export const getRelatedGames = async (req: any, res: any, client: Client) => {
 
 export const countNumberOfResults = async (request: any) => {
     try {
-        const fetchResponse = await fetch('http://localhost:9200/project_s6_games/_count', {
+        const fetchResponse = await fetch(`http://localhost:${config.elasticSearchPort}/project_s6_games/_count`, {
         method: "POST",
         body: JSON.stringify({ query: request.body.query }),
         headers: {

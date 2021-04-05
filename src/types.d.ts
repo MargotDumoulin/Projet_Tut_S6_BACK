@@ -53,17 +53,23 @@ type Genre = {
     name: string;
 }
 
+type SortFilter = {
+    sortBy: string,
+    isASC: boolean
+}
+
 type Filters = {
-    name: string | undefined,
-    release_date: DateFilter | undefined,
-    developer: string[] | undefined,
-    publisher: string[] | undefined,
-    platforms: string[] | undefined,
-    categories: string[] | undefined,
-    genres: string[] | undefined,
-    steamspy_tags: string[] | undefined,
-    required_age: number[] | undefined,
-    positive_rating_percent: number | undefined
+    name?: string | undefined,
+    release_date?: DateFilter | undefined,
+    developer?: string[] | undefined,
+    publisher?: string[] | undefined,
+    platforms?: string[] | undefined,
+    categories?: string[] | undefined,
+    genres?: string[] | undefined,
+    steamspy_tags?: string[] | undefined,
+    required_age?: number[] | undefined,
+    positive_rating_percent?: number | undefined,
+    sort?: SortFilter | undefined
 };
 
 type TagFilter = {
@@ -477,8 +483,14 @@ type Game = {
     support_email: string,
 };
 
+type User = {
+    lastname: string,
+    firstname: string,
+    email: string,
+    password: string,
+    confirmPassword?: string
+};
 type FullTag = {
     name: string,
     value?: string
 }
-

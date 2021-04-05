@@ -82,9 +82,34 @@ export const requestGames = (page: number, filters: Filters) => {
             "from": ((page * 10) - 10),
             "size": 10,
             sort: [
-                {
+                ...((filters.sort && filters.sort.sortBy === 'release_date') ? [{
+                    release_date: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'developer') ? [{
+                    developer: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'publisher') ? [{
+                    publisher: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'name') ? [{
+                    name: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'required_age') ? [{
+                    release_date: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                }] : []),
+                ...((filters.sort && filters.sort.sortBy === 'positive_reviews') ? [{
+                    "_script": {
+                        type: "number",
+                        script: {
+                            lang: "painless",
+                            source: `doc['positive_ratings'].value * 100 / (doc['positive_ratings'].value + doc['negative_ratings'].value)`,
+                        },
+                        order: filters.sort.isASC ? "asc" : "desc"
+                    }
+                }] : []),
+                ...(!filters.sort ? [{
                     release_date: { "order" : "desc" }
-                }
+                }] : [])
             ],
             query: {
                 bool: {
@@ -130,7 +155,6 @@ export const requestGames = (page: number, filters: Filters) => {
             }
         }  
     }
-
     return request;
 }
 

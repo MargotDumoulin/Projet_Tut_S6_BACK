@@ -7,19 +7,19 @@ const platformsImport = require('./import_platforms.js');
 const tagsImport = require('./import_tags.js');
 const gamesImport = require('./import_games.js');
 const agesImport = require('./import_required_ages');
-const { parserInfo } = require('./steam.js');
+const config = require('../config.json');
 
-const client = new Client({ node: 'http://localhost:9200' });
+const client = new Client({ node: `http://localhost:${config.elasticSearchPort}` });
 
 const imports = [
     gamesImport,
-    // publishersImport,
-    // developersImport,
-    // categoriesImport,
-    // genresImport,
-    // platformsImport,
-    //tagsImport,
-    // agesImport
+    publishersImport,
+    developersImport,
+    categoriesImport,
+    genresImport,
+    platformsImport,
+    tagsImport,
+    agesImport
 ];
 
 // Inserts data into ElasticSearch
@@ -78,4 +78,29 @@ async function insertData(dataset, dbIndexScheme) {
     }
 
     console.log('++++++ Done.\n');
+    createUsersIndex();
 })();
+
+const createUsersIndex = () => {
+    client.indices.create({
+        index: "project_s6_users",
+        body: {
+            mappings: {
+                properties: {
+                    firstname: { type: 'text' },
+                    lastname: { type: 'text' },
+                    email: { type: 'keyword' },
+                    password: { type: 'keyword' },
+                    library: { type: 'object' }
+                }
+            }
+        } 
+    })
+    .then(() => {
+        console.log('++++++ Users table created.\n')
+    })
+    .catch(() => {
+        console.log('------ Error while trying to create USERS table. \n')
+    });
+}   
+
