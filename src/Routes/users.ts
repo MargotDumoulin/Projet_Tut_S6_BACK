@@ -54,7 +54,7 @@ export const createUser = (req: any, res: any, client: Client) => {
 };
 
 export const getUsers = (req: any, res: any, client: Client) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
+    const page: number = req.query.page > 0 ? req.query.page : 1;
     let request: {} = {};
     
     request = requestUsers(page);
@@ -78,8 +78,8 @@ export const getUsers = (req: any, res: any, client: Client) => {
 };
 
 export const addToLibrary = (req: any, res: any, client: Client) => {
-    const game: Game = req?.body?.game;
-    const token: string = req?.body?.token;
+    const gameId: number = req?.body?.gameId;
+    const token: string = req?.headers?.authorization;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
@@ -94,10 +94,10 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
 
                     let newLibrary;
                     if (userResult.library) {
-                        userResult.library.push(game);
+                        userResult.library.push(gameId);
                         newLibrary = userResult.library;
                     } else {
-                        newLibrary = [game];
+                        newLibrary = [gameId];
                     }
                     
                     client.update({
@@ -112,7 +112,6 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                     .then(() => { res.status(200).send('OK')})
                     .catch((error) => { 
                         console.log(error); 
-                        console.log(error.meta.body.error); 
                         res.status(500).send('Internal Server Error'); })
                     
                 } else {
@@ -129,7 +128,7 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
 
 export const removeFromLibrary = (req: any, res: any, client: Client) => {
     const gameId: number = req?.body?.gameId;
-    const token: string = req?.body?.token;
+    const token: string = req?.headers?.authorization;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
@@ -141,7 +140,7 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
                     const userId: string = response.body.hits.hits[0]._id;
                     const userResult: User = response.body.hits.hits[0]._source;
                     
-                    const newLibrary = userResult.library?.length === 1 ? null : userResult.library?.filter((game: Game) => gameId !== game.id);
+                    const newLibrary = userResult.library?.length === 1 ? [] : userResult.library?.filter((id: number) => gameId !== id);
 
                     client.update({
                         index: 'project_s6_users',
@@ -169,14 +168,44 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
     });
 };
 
-export const getLibrary = (req: any, res: any, client: Client) => {
-    const page: number = req.query.page > 0 ? req.query.page : '1';
-    const token: string = req?.body?.token;
+export const isInLibrary = (req: any, res: any, client: Client) => {
+    const id: number = req.params.id > 0 ? Number(req.params.id) : -1;
+    const token: string = req?.headers?.authorization;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
         if (decoded && decoded.email) {
-            const request = requestLibrary(page, decoded.email);
+            const request = requestLibrary(decoded.email);
+            client.search(request).then(function(response) {
+                const results: any[] = response.body.hits.hits;
+
+                if (results && results[0]._source && results[0]._source.library) {
+                    if (results[0]._source.library.find((gameId: number) => id === gameId)) {
+                        res.status(409).send('Already in library');
+                    } else {
+                        console.log(results[0]._source.library);
+                        res.status(200).send('OK - Not in library');
+                    }
+                } else {
+                    res.status(200).send('OK - Not in library');
+                }  
+            }).catch((error) => {
+                console.log(error);
+                res.status(500).send('Internal Server Error');
+            });
+        } else {
+            res.status(403).send('Not allowed');
+        }
+    });   
+}
+
+export const getLibrary = (req: any, res: any, client: Client) => {
+    const token: string = req?.headers?.authorization;
+    const publicKey = fs.readFileSync('config/keys/public.pem');
+
+    jwt.verify(token, publicKey, (error: any, decoded: any) => {
+        if (decoded && decoded.email) {
+            const request = requestLibrary(decoded.email);
             // The token is valid, let's search for the users already existing library
             client.search(request).then((response) => {
                 const results: {}[] = response.body.hits.hits;
@@ -187,7 +216,7 @@ export const getLibrary = (req: any, res: any, client: Client) => {
                 });
 
                 if (Object.keys(formattedResults).length !== 0) {
-                    res.status(200).send(formattedResults);
+                    res.status(200).send(formattedResults[0]);
                 } else {
                     res.status(404).send('Not found');
                 }
@@ -202,7 +231,7 @@ export const getLibrary = (req: any, res: any, client: Client) => {
     });
 };
 
-export const isTokenValid = (req: any, res: any, client: Client) => {
+export const isTokenValid = (req: any, res: any) => {
     const token: string = req?.body?.token;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 

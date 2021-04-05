@@ -586,7 +586,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/tags",
+							"raw": "http://{{localhost}}/api/tags?page=2",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -594,6 +594,12 @@
 							"path": [
 								"api",
 								"tags"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -817,10 +823,17 @@
 					"name": "Create Account",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"lastname\": \"Wicke\",\n    \"firstname\": \"Johne\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"passwordomg\",\n    \"confirmPassword\": \"passwordomg\"\n}",
+							"raw": "{\n    \"lastname\": \"Wicke\",\n    \"firstname\": \"Johne\",\n    \"email\": \"margot@gmail.com\",\n    \"password\": \"passwordomg\",\n    \"confirmPassword\": \"passwordomg\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -846,10 +859,17 @@
 					"name": "Sign In",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"passwordomg\"\n}",
+							"raw": "{\n    \"email\": \"margot@gmail.com\",\n    \"password\": \"passwordomg\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -952,6 +972,149 @@
 									"key": "value",
 									"value": "tag_pvp"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Library",
+			"item": [
+				{
+					"name": "Add To Library",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gameId\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/user/library/add",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"library",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove From Library",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gameId\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/user/library/remove",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"library",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Library",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/user/library",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"library"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is In Library",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{localhost}}/api/user/library/4",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"library",
+								"4"
 							]
 						}
 					},

@@ -489,9 +489,10 @@ type User = {
     email: string,
     password: string,
     confirmPassword?: string,
-    library?: Game[]
+    library?: number[] | null
 };
+
 type FullTag = {
     name: string,
     value?: string
-}
+};

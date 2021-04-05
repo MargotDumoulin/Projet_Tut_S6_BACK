@@ -27,14 +27,12 @@ export const requestUsers = (page: number) => {
             "size": 10
         }  
     }
-}
+};
 
-export const requestLibrary = (page: number, email: string) => {
+export const requestLibrary = (email: string) => {
     return {
         index: 'project_s6_users',
         body: {
-            "from": ((page * 10) - 10),
-            "size": 10,
             "_source": ["library"],
             query: {
                 bool: {
@@ -49,4 +47,4 @@ export const requestLibrary = (page: number, email: string) => {
             }
         }  
     }
-}
+};
