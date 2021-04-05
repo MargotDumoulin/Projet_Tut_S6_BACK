@@ -9,114 +9,171 @@
 			"name": "Delete Tables",
 			"item": [
 				{
-					"name": "Delete Steam",
+					"name": "Delete Games",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam",
+							"raw": "http://localhost:9200/project_s6_games",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam"
+								"project_s6_games"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Media",
+					"name": "Delete Publishers",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_media_data",
+							"raw": "http://localhost:9200/project_s6_publishers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_media_data"
+								"project_s6_publishers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Description",
+					"name": "Delete Platforms",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_description_data",
+							"raw": "http://localhost:9200/project_s6_platforms",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_description_data"
+								"project_s6_platforms"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Requirements",
+					"name": "Delete Developers",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_requirements_data",
+							"raw": "http://localhost:9200/project_s6_developers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_requirements_data"
+								"project_s6_developers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Support",
+					"name": "Delete Categories",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_support_info",
+							"raw": "http://localhost:9200/project_s6_categories",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_support_info"
+								"project_s6_categories"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Steamspy",
+					"name": "Delete Genres",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steamspy_tag_data",
+							"raw": "http://localhost:9200/project_s6_genres",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steamspy_tag_data"
+								"project_s6_genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tags",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_tags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Ages",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_required_ages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_required_ages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Users",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_users"
 							]
 						}
 					},
@@ -129,31 +186,19 @@
 			"name": "Search Tables",
 			"item": [
 				{
-					"name": "Search Steam",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Search Games",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam/_search",
+							"raw": "http://localhost:9200/project_s6_games/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam",
+								"project_s6_games",
 								"_search"
 							]
 						}
@@ -161,19 +206,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Media",
+					"name": "Search Publishers",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_media_data/_search",
+							"raw": "http://localhost:9200/project_s6_publishers/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_media_data",
+								"project_s6_publishers",
 								"_search"
 							]
 						}
@@ -181,19 +226,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Description",
+					"name": "Search Platforms",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_description_data/_search",
+							"raw": "http://localhost:9200/project_s6_platforms/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_description_data",
+								"project_s6_platforms",
 								"_search"
 							]
 						}
@@ -201,31 +246,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Requirements",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Search Tags",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_requirements_data/_search",
+							"raw": "http://localhost:9200/project_s6_tags/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_requirements_data",
+								"project_s6_tags",
 								"_search"
 							]
 						}
@@ -233,19 +266,19 @@
 					"response": []
 				},
 				{
-					"name": "Search Support",
+					"name": "Search Genres",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steam_support_info/_search",
+							"raw": "http://localhost:9200/project_s6_genres/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steam_support_info",
+								"project_s6_genres",
 								"_search"
 							]
 						}
@@ -253,19 +286,79 @@
 					"response": []
 				},
 				{
-					"name": "Search Steamspy",
+					"name": "Search Categories",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/project_s6_steamspy_tag_data/_search",
+							"raw": "http://localhost:9200/project_s6_categories/_search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"project_s6_steamspy_tag_data",
+								"project_s6_categories",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Developers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_developers/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_developers",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Ages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_required_ages/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_required_ages",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/project_s6_users/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_users",
 								"_search"
 							]
 						}
@@ -276,42 +369,106 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Search By Name",
+			"name": "Get By Name",
 			"item": [
 				{
-					"name": "[Steam] Search By Name (Paginated)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Get Publisher By Name (Paginated)",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://{{localhost}}/games?name=c&page=10",
+							"raw": "http://{{localhost}}/api/publishers?name=d-pad stodio",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
+								"api",
+								"publishers"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "d-pad stodio"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Game By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/games?name=countor-strike",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
 								"games"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "c"
+									"value": "countor-strike"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Developer By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/developers?name=vis - v",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"developers"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "vis - v"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tag By Name (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/tags?name=val&page=1",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "val"
 								},
 								{
 									"key": "page",
-									"value": "10"
+									"value": "1"
 								}
 							]
 						}
@@ -352,14 +509,438 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/game/10",
+							"raw": "http://{{localhost}}/api/game/730",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
+								"api",
 								"game",
-								"10"
+								"730"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get All (formatted)",
+			"item": [
+				{
+					"name": "Get Games",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/games",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Publishers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/publishers",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"publishers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Developers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/developers",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"developers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/tags",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/categories",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Platforms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/platforms",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"platforms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Genres",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/genres",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/ages",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"ages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/users",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get With Parameters",
+			"item": [
+				{
+					"name": "Get Game With Parameters (Paginated)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sort\": {\n        \"sortBy\": \"positive_reviews\",\n        \"isASC\": true\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/games",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get Number of Pages",
+			"item": [
+				{
+					"name": "[Games] Get number of pages ",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"bool\": {\n            \"must\": [\n                {\n                    \"wildcard\": {\n                        \"name\": {\n                            \"value\": \"Counter-Strike*\"\n                        }\n                    }\n                }\n            ],\n            \"filter\": [\n                {\n                    \"script\": {\n                        \"script\": {\n                            \"source\": \"(doc['positive_ratings'].size() > 0 && doc['negative_ratings'].size() > 0) \\n                            && (\\n                                    doc['positive_ratings'].value * 100 / (doc['positive_ratings'].value + doc['negative_ratings'].value)\\n                                ) >= params['positive_rating_percent']\",\n                            \"params\": {\n                                \"positive_rating_percent\": 80\n                            },\n                            \"lang\": \"painless\"\n                        }\n                    }\n                }\n            ]\n        }\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/project_s6_games/_count",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"project_s6_games",
+								"_count"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Create Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastname\": \"Wicke\",\n    \"firstname\": \"Johne\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"passwordomg\",\n    \"confirmPassword\": \"passwordomg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/user/create",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"passwordomg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/user/login",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is Token Valid",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjE3Mzg4OTYyfQ.y6IUl-eEUtv-qn9WZrxKvSzQDi649u-1sPuG4KfPG2gCuG2gXwfj9i_xTqhhc1gr1rMzb4DO2XLFbN8QDBrv8lX8ZzHpcPY9rvM8M5QXMr3fjhPOuenoB8ojNKSGi-i8qCV9A2BcU7HVHxzKv-_1B_drLubB1hXKVZR0ujAyK8g5eZzbL3zX_cJxD_BbWaE5eTJclEMLIKmc9DhmdsCOZp-mWkghW6HpfKKT90trfRCJXj83CiYT_-tc3p-w_eWY2HKkE5-T8ctQUg-StTl4nXm1WEJdxSJWQeCP0lPG_JuEI9WMCRhA101TFGXux5v1Ud6FDSe-qm0LzL50UUHShA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{localhost}}/api/user/token",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is Email Taken",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/user/email?email=t@gmail.com",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"email"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "t@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get By Value",
+			"item": [
+				{
+					"name": "Get Tag By Value",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{localhost}}/api/tags?value=tag_pvp",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "value",
+									"value": "tag_pvp"
+								}
 							]
 						}
 					},
