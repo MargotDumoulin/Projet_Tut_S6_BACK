@@ -136,6 +136,12 @@ export const requestGames = (page: number, filters: Filters) => {
 
 export const requestGamesByTags = (tagFilter: TagFilter) => {
 
+    const tagsFilter = tagFilter.tags.map(tag => ({
+        match: {
+            steamspy_tags: tag
+        }
+    }));
+    
     const request = {
         index: 'project_s6_games',
         body: {
@@ -155,13 +161,9 @@ export const requestGamesByTags = (tagFilter: TagFilter) => {
             ],
             query: {
                 bool: {
-                    filter: [
-                        ...(tagFilter.tags ? [{
-                            terms: {
-                                steamspy_tags: tagFilter.tags
-                            }
-                        }] : [])
-                    ],
+                    must: [
+                        ...(tagsFilter ? tagsFilter : []),
+                    ]
                 },
                 
             }
