@@ -37,7 +37,7 @@ export const createUser = (req: any, res: any, client: Client) => {
             
             client.index({
                 index: "project_s6_users",
-                body: { ...user, password: hashedPassword }
+                body: { ...user, password: hashedPassword, library: [] }
             }).then(() => {
                 res.status(200).send('OK');
             }).catch(() => {
@@ -84,6 +84,7 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
 
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
         if (decoded && decoded.email) {
+            console.log(decoded.email)
             // The token is valid, let's search for the users already existing library
             client.search(requestUser(decoded.email))
             .then((response) => {
@@ -95,11 +96,16 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                         index: 'project_s6_users',
                         id: userId,
                         body: {
-                          library: userResult.library ? userResult.library.push(game) : [game]
+                            doc: {
+                                library: userResult.library ? userResult.library.push(game) : [game]
+                            }
                         }
                     })
                     .then(() => { res.status(200).send('OK')})
-                    .catch((error) => { console.log(error); res.status(500).send('Internal Server Error'); })
+                    .catch((error) => { 
+                        console.log(error); 
+                        console.log(error.meta.body.error);
+                        res.status(500).send('Internal Server Error'); })
                     
                 } else {
                     // The email is not valid (user does not exist)
