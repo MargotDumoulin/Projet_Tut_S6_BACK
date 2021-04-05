@@ -7,7 +7,6 @@ const platformsImport = require('./import_platforms.js');
 const tagsImport = require('./import_tags.js');
 const gamesImport = require('./import_games.js');
 const agesImport = require('./import_required_ages');
-const { parserInfo } = require('./steam.js');
 const config = require('../config.json');
 
 const client = new Client({ node: `http://localhost:${config.elasticSearchPort}` });
