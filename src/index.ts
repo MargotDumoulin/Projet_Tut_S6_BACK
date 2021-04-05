@@ -9,17 +9,16 @@ import { getTags } from './Routes/tags';
 import { getGenres } from './Routes/genres';
 import { getPlatforms } from './Routes/platforms';
 import { getAges } from './Routes/ages';
+import config from './config.json';
 
 const app = express();
-const port = 5000; // Server's port
-const elasticSearchPort = 9200; // Replace this var if your ElasticSearch server is not launching on port 9200
 
-const client = new Client({ node: `http://localhost:${elasticSearchPort}` }); // ElasticSearch client
+const client = new Client({ node: `http://localhost:${config.elasticSearchPort}` }); // ElasticSearch client
 
 // start the Express server
 app.use(express.json());
-app.listen( port, () => {
-    console.log( `server started at http://localhost:${port}` );
+app.listen( config.port, () => {
+    console.log( `server started at http://localhost:${config.port}` );
 });
 
 // --- ROUTES ----
