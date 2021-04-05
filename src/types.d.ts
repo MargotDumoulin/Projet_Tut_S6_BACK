@@ -72,6 +72,10 @@ type Filters = {
     sort?: SortFilter | undefined
 };
 
+type TagFilter = {
+    tags: string[]
+}
+
 type Game = {
     id: number,
     name: string,

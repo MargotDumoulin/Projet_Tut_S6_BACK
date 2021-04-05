@@ -158,6 +158,53 @@ export const requestGames = (page: number, filters: Filters) => {
     return request;
 }
 
+export const requestGamesByTags = (tagFilter: TagFilter, id: number) => {
+
+    const tagsFilter = tagFilter.tags.map(tag => ({
+        match: {
+            steamspy_tags: tag
+        }
+    }));
+    
+    const request = {
+        index: 'project_s6_games',
+        body: {
+            "from": 0,
+            "size": 10,
+            sort: [
+                {
+                    "_script": {
+                        type: "number",
+                        script: {
+                            lang: "painless",
+                            source: `Double.parseDouble(/-/.split(doc['owners'].value)[1])`,
+                        },
+                        order: "desc"
+                    }
+                }
+            ],
+            query: {
+                bool: {
+                    must: [
+                        ...(tagsFilter ? tagsFilter : []),
+                    ],
+                    must_not: [
+                        {
+                            match: {
+                                id: id
+                            }
+                        }
+                    ]
+                },
+                
+            }
+        }  
+    }
+
+    return request;
+}
+
+
 export const requestGameById = (id: number) => {
     return {
         index: [

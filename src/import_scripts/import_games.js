@@ -66,7 +66,7 @@ const dbIndexScheme = {
                 negative_ratings: { type: 'integer' },
                 average_playtime: { type: 'integer' },
                 median_playtime: { type: 'integer' },
-                owners: { type: 'text' },
+                owners: { type: 'keyword' },
                 price: { type: 'float' },
                 tag_1980s: { type: 'integer' },
                 tag_1990s:  { type: 'integer' },

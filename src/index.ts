@@ -2,7 +2,7 @@ import { isLoginInfoCorrect, createUser, getUsers, isTokenValid, isEmailTaken } 
 import { getCategories } from './Routes/categories';
 import express from 'express';
 import { Client }  from '@elastic/elasticsearch';
-import { getGameById, getGames } from './Routes/games';
+import { getGameById, getGames, getRelatedGames } from './Routes/games';
 import { getPublishers } from './Routes/publishers';
 import { getDevelopers } from './Routes/developers';
 import { getTags } from './Routes/tags';
@@ -25,6 +25,7 @@ app.listen( config.port, () => {
 /* GAMES */
 app.post('/api/games', (req, res) => { getGames(req, res, client); });
 app.get('/api/games', (req, res) => { getGames(req, res, client); });
+app.post('/api/games/related/:id', (req, res) => { getRelatedGames(req, res, client); });
 app.get('/api/game/:id', (req, res) => { getGameById(req, res, client); });
 
 /* PUBLISHERS */
