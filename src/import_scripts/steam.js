@@ -1,5 +1,5 @@
 const dbIndexScheme = {
-    index: 'project_s6_steam',
+    index: 'project_s6_games',
     body: {
         mappings: {
             properties: {
@@ -8,7 +8,7 @@ const dbIndexScheme = {
                 release_date: { type: 'date' },
                 english: { type: 'boolean' },
                 developer: { type: 'text' },
-                publisher: { type: 'text' },
+                publisher: { type: 'text', normalizer: "my_normalizer" },
                 platforms: { type: 'text' },
                 required_age: { type: 'byte' },
                 categories: { type: 'text' },
