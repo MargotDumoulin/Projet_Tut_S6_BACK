@@ -133,7 +133,7 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
                     const userId: string = response.body.hits.hits[0]._id;
                     const userResult: User = response.body.hits.hits[0]._source;
                     
-                    const newLibrary = userResult.library?.length === 1 ? undefined : userResult.library?.filter((game: Game) => gameId !== game.id);
+                    const newLibrary = userResult.library?.length === 1 ? null : userResult.library?.filter((game: Game) => gameId !== game.id);
 
                     client.update({
                         index: 'project_s6_users',
