@@ -37,7 +37,6 @@ export const getGames = async (req: any, res: any, client: Client) => {
                         res.status(500).send("Internal Server Error");
                     });
                 } else {
-                    console.log('ayo');
                     res.status(403).send("Not allowed");
                 }
             });
