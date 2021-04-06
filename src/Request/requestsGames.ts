@@ -95,7 +95,7 @@ export const requestGames = (page: number, filters: Filters) => {
                     name: { "order" : filters.sort.isASC ? "asc" : "desc" }
                 }] : []),
                 ...((filters.sort && filters.sort.sortBy === 'required_age') ? [{
-                    release_date: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                    required_age: { "order" : filters.sort.isASC ? "asc" : "desc" }
                 }] : []),
                 ...((filters.sort && filters.sort.sortBy === 'positive_reviews') ? [{
                     "_script": {
@@ -148,7 +148,11 @@ export const requestGames = (page: number, filters: Filters) => {
                                 required_age: filters.required_age
                             }
                         }] : []),
-                        
+                        ...(filters.library ? [{
+                            terms: {
+                                id: filters.library
+                            }
+                        }] : [])
                     ],
                 },
                 

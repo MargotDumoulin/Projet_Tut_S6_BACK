@@ -53,7 +53,7 @@ app.get('/api/ages', (req, res) => { getAges(req, res, client); });
 /* USERS */
 app.post('/api/user/login', (req, res) => { isLoginInfoCorrect(req, res, client); });
 app.post('/api/user/create', (req, res) => { createUser(req, res, client); });
-app.post('/api/user/token', (req, res) => { isTokenValid(req, res); });
+app.get('/api/user/token', (req, res) => { isTokenValid(req, res); });
 app.get('/api/user/email', (req, res) => { isEmailTaken(req, res, client); });
 
 app.post('/api/user/library/add', (req, res) => { addToLibrary(req, res, client); });

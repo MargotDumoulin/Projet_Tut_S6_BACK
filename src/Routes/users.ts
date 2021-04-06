@@ -109,7 +109,7 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                             }
                         }
                     })
-                    .then(() => { res.status(200).send('OK')})
+                    .then(() => { res.status(200).send({ status: 'OK' })})
                     .catch((error) => { 
                         console.log(error); 
                         res.status(500).send('Internal Server Error'); })
@@ -119,7 +119,7 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                     res.status(403).send('Not allowed');
                 }
             })
-            .catch(() => { console.log('lalo'); res.status(500).send('Internal Server Error'); })
+            .catch(() => { res.status(500).send('Internal Server Error'); })
         } else {
             res.status(403).send('Not allowed');
         }
@@ -151,7 +151,7 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
                             }
                         }
                     })
-                    .then(() => { res.status(200).send('OK')})
+                    .then(() => { res.status(200).send({ status: 'OK' })})
                     .catch((error) => { 
                         console.log(error); 
                         res.status(500).send('Internal Server Error'); })
@@ -161,7 +161,7 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
                     res.status(403).send('Not allowed');
                 }
             })
-            .catch(() => { console.log('lalo'); res.status(500).send('Internal Server Error'); })
+            .catch(() => { res.status(500).send('Internal Server Error'); })
         } else {
             res.status(403).send('Not allowed');
         }
@@ -181,16 +181,15 @@ export const isInLibrary = (req: any, res: any, client: Client) => {
 
                 if (results && results[0]._source && results[0]._source.library) {
                     if (results[0]._source.library.find((gameId: number) => id === gameId)) {
-                        res.status(409).send('Already in library');
+                        res.status(200).send({ isInLibrary: true });
                     } else {
                         console.log(results[0]._source.library);
-                        res.status(200).send('OK - Not in library');
+                        res.status(200).send({ isInLibrary: false });
                     }
                 } else {
-                    res.status(200).send('OK - Not in library');
+                    res.status(200).send({ isInLibrary: false });
                 }  
             }).catch((error) => {
-                console.log(error);
                 res.status(500).send('Internal Server Error');
             });
         } else {
@@ -232,7 +231,7 @@ export const getLibrary = (req: any, res: any, client: Client) => {
 };
 
 export const isTokenValid = (req: any, res: any) => {
-    const token: string = req?.body?.token;
+    const token: string = req?.headers?.authorization;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 
     if (token) {
