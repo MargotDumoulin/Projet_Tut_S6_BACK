@@ -722,10 +722,16 @@
 					"name": "Get Game With Parameters (Paginated)",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sort\": {\n        \"sortBy\": \"positive_reviews\",\n        \"isASC\": true\n    }\n}",
+							"raw": "{\n    \"name\": \"C\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -771,6 +777,32 @@
 								"games",
 								"related",
 								"108710"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recommended Games",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{localhost}}/api/games/recommended",
+							"protocol": "http",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"recommended"
 							]
 						}
 					},
@@ -869,7 +901,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"margot@gmail.com\",\n    \"password\": \"passwordomg\"\n}",
+							"raw": "{\n    \"email\": \"boop@bip\",\n    \"password\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -893,12 +925,21 @@
 				},
 				{
 					"name": "Is Token Valid",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
-						"header": [],
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjE3Mzg4OTYyfQ.y6IUl-eEUtv-qn9WZrxKvSzQDi649u-1sPuG4KfPG2gCuG2gXwfj9i_xTqhhc1gr1rMzb4DO2XLFbN8QDBrv8lX8ZzHpcPY9rvM8M5QXMr3fjhPOuenoB8ojNKSGi-i8qCV9A2BcU7HVHxzKv-_1B_drLubB1hXKVZR0ujAyK8g5eZzbL3zX_cJxD_BbWaE5eTJclEMLIKmc9DhmdsCOZp-mWkghW6HpfKKT90trfRCJXj83CiYT_-tc3p-w_eWY2HKkE5-T8ctQUg-StTl4nXm1WEJdxSJWQeCP0lPG_JuEI9WMCRhA101TFGXux5v1Ud6FDSe-qm0LzL50UUHShA\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -996,7 +1037,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"gameId\": 3\n}",
+							"raw": "{\n    \"gameId\": 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
