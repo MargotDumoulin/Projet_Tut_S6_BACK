@@ -58,6 +58,10 @@ type SortFilter = {
     isASC: boolean
 }
 
+type Library = {
+    library: number[];
+}
+
 type Filters = {
     name?: string | undefined,
     release_date?: DateFilter | undefined,
@@ -69,7 +73,8 @@ type Filters = {
     steamspy_tags?: string[] | undefined,
     required_age?: number[] | undefined,
     positive_rating_percent?: number | undefined,
-    sort?: SortFilter | undefined
+    sort?: SortFilter | undefined,
+    library?: number[] | true
 };
 
 type TagFilter = {

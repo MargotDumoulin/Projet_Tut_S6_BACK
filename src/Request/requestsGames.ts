@@ -148,7 +148,11 @@ export const requestGames = (page: number, filters: Filters) => {
                                 required_age: filters.required_age
                             }
                         }] : []),
-                        
+                        ...(filters.library ? [{
+                            terms: {
+                                id: filters.library
+                            }
+                        }] : [])
                     ],
                 },
                 

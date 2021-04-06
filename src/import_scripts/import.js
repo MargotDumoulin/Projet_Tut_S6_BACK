@@ -12,14 +12,14 @@ const config = require('../config.json');
 const client = new Client({ node: `http://localhost:${config.elasticSearchPort}` });
 
 const imports = [
-    // gamesImport,
-    // publishersImport,
-    // developersImport,
-    // categoriesImport,
-    // genresImport,
-    // platformsImport,
+    gamesImport,
+    publishersImport,
+    developersImport,
+    categoriesImport,
+    genresImport,
+    platformsImport,
     tagsImport,
-    // agesImport
+    agesImport
 ];
 
 // Inserts data into ElasticSearch
