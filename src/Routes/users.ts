@@ -84,7 +84,6 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
 
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
         if (decoded && decoded.email) {
-            console.log(decoded.email)
             // The token is valid, let's search for the users already existing library
             client.search(requestUser(decoded.email))
             .then((response) => {
@@ -183,7 +182,6 @@ export const isInLibrary = (req: any, res: any, client: Client) => {
                     if (results[0]._source.library.find((gameId: number) => id === gameId)) {
                         res.status(200).send({ isInLibrary: true });
                     } else {
-                        console.log(results[0]._source.library);
                         res.status(200).send({ isInLibrary: false });
                     }
                 } else {
