@@ -91,16 +91,17 @@ const createUsersIndex = () => {
                     lastname: { type: 'text' },
                     email: { type: 'keyword' },
                     password: { type: 'keyword' },
-                    library: { type: 'object' }
+                    library: { type: 'integer' }
                 }
             }
         } 
     })
     .then(() => {
-        console.log('++++++ Users table created.\n')
+        console.log('++++++ Users table created.\n');
     })
-    .catch(() => {
-        console.log('------ Error while trying to create USERS table. \n')
+    .catch((error) => {
+        console.log(error.meta.body.error);
+        console.log('------ Error while trying to create USERS table. \n');
     });
 }   
 
