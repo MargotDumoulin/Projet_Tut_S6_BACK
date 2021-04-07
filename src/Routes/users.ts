@@ -93,8 +93,13 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
 
                     let newLibrary;
                     if (userResult.library) {
-                        userResult.library.push(gameId);
-                        newLibrary = userResult.library;
+                        if (userResult.library.find((id: number) => id === gameId)) {
+                            res.status(403).send({ message: "Not Allowed" });
+                            return;
+                        } else {
+                            userResult.library.push(gameId);
+                            newLibrary = userResult.library;
+                        }
                     } else {
                         newLibrary = [gameId];
                     }
@@ -109,10 +114,7 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                         }
                     })
                     .then(() => { res.status(200).send({ message: 'OK' })})
-                    .catch((error) => { 
-                        console.log(error); 
-                        res.status(500).send({ message: "Internal Server Error" }); })
-                    
+                    .catch((error) => { res.status(500).send({ message: "Internal Server Error" }); })
                 } else {
                     // The email is not valid (user does not exist)
                     res.status(403).send({ message: "Not Allowed" });
