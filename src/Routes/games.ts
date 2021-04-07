@@ -149,7 +149,6 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                         // Step 4: Get the tags value of each game !
                         const formattedTags: Tag[] = [];
                         for (let tag of tags) {
-                            console.log(tag);
                             await client.search(requestTagByValue(tag))
                             .then((response) => {
                                 let formattedResult: Tag; 
@@ -173,7 +172,7 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                                         const relatedGame: Game = parseIntoGameType(formattedResult);
 
                                         // We don't want any game appearing more than once 
-                                        if (!recommendedGames.find((game) => game.id !== relatedGame.id)) {
+                                        if (!recommendedGames.find((game) => game.id === relatedGame.id)) {
                                             recommendedGames.push(relatedGame); 
                                         }
                                     }
@@ -282,16 +281,5 @@ const searchRelatedGames = async (res: any, client: Client, tagFilter: TagFilter
         res.status(404).send({ message: "Not found" });
         return undefined;
     });
-}
-
-const getMostRelevantTags = (games: Game[]) => {
-    let tags: string[] = [];
-
-    games.forEach((game) => {
-        tags = tags.concat(game.steamspy_tags.map((tag) => tag));
-    });
-
-    const sortedTags = sortByOccurrences(countOccurrences(tags)).slice(0,5);
-    return sortedTags;
 };
 
