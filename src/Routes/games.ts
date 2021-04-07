@@ -74,22 +74,13 @@ export const getGameById = (req: any, res: any, client: Client) => {
 export const getRelatedGames = async (req: any, res: any, client: Client) => {
     const tagFilter: TagFilter = req.body;
     const id: number = req.params.id;
-    let firstTry: boolean = true;
 
-    let formattedResults: Game[] | any = await searchRelatedGames(res, client, tagFilter, id);
-    console.log(formattedResults);
+    const relatedGames: Game[] | undefined = await computeRelatedGames(client, tagFilter, id);
 
-    if (formattedResults && Object.keys(formattedResults).length !== 0) {
-        res.status(200).send(formattedResults);
+    if (relatedGames) {
+        res.status(200).send(relatedGames);
     } else {
-        // retry but remove the last one of the top tags :)
-        formattedResults = await searchRelatedGames(res, client, { tags: tagFilter.tags.slice(0, 2) }, id);
-
-        if (formattedResults && Object.keys(formattedResults).length !== 0) {
-            res.status(200).send(formattedResults);
-        } else {
-            res.status(404).send({ message: "Not found" });
-        }
+        res.status(404).send({ message: "Not found" });
     }
 };
 
@@ -110,12 +101,12 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                 results.forEach((res: any) => { formattedResults.push(res._source); });
 
                 if (results.length > 0) {
-                    const latestIds: number[] = formattedResults[0].library.splice(0, 10);
+                    const library: number[] = formattedResults[0].library;
+                    const latestIds: number[] = library.slice(Math.max(library.length - 10, 0));
                     // For example: if we have ten games in the library, we'll get one recommended game per game (so we have 10 in total).
                     // If we have only one game in the library, we'll try to get as much recommended game per game as possible, with a max of 10.
                     // If we have two games in the library, we'll have a max of 5 recommended games per game, etc...
                     const maxOfRecommendedGamesPerRelatedGame: number = Math.floor(10 / latestIds.length);
-                    console.log(maxOfRecommendedGamesPerRelatedGame);
 
                     // Step 2: Now that we have the 10 latest game ids added to the library, we need to get the games associated
                     const games: Game[] = [];
@@ -137,8 +128,8 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                         });
                     }
 
-                    // Step 3: Now that we have the games, let's fetch the first two related games of each game
-                    const recommendedGames: Game[] = [];
+                    // Step 3: Now that we have the games, let's fetch the related games of each game
+                    let recommendedGames: Game[] = [];
                     for (let game of games) {
                         const tags: any[] = Object.entries(game)
                             .filter(([key, val]) => key.includes('tag_') && val && val > 0)
@@ -161,24 +152,14 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                         }
 
                         // Step 5: With the tags, get related games of each game
-                        await client.search(requestGamesByTags({ tags: formattedTags.map((tag: Tag) => tag.name) }, game.id))
-                            .then((response) => {
-                                const results: any[] = response.body.hits.hits;
-                                const formattedResult: Game | {} = {};
-                            
-                                for (let i = 0; i < maxOfRecommendedGamesPerRelatedGame; i++) {
-                                    if (results && results[i] && results[i]._source) {
-                                        Object.assign(formattedResult, results[0]._source);
-                                        const relatedGame: Game = parseIntoGameType(formattedResult);
-
-                                        // We don't want any game appearing more than once 
-                                        if (!recommendedGames.find((game) => game.id === relatedGame.id)) {
-                                            recommendedGames.push(relatedGame); 
-                                        }
-                                    }
-                                }
-                            })
-                            .catch((error) => { res.status(500).send({ message: "Internal Server Error" }); });
+                        const relatedGames: Game[] | undefined = await computeRelatedGames(client, { tags: formattedTags.map((tag: Tag) => tag.name) }, game.id);
+                        const intermediateRecommended: Game[] = [];
+                        relatedGames?.forEach((relatedGame: Game) => {
+                            if (!recommendedGames.find((recommendedGame: Game) => recommendedGame.id === relatedGame.id)) {
+                                intermediateRecommended.push(relatedGame);
+                            }
+                        });
+                        recommendedGames = recommendedGames.concat(intermediateRecommended.slice(0, maxOfRecommendedGamesPerRelatedGame));
                     }
                     
                     if (recommendedGames.length > 0) {
@@ -267,7 +248,7 @@ const searchGames = async (res: any, client: Client, request: any, page: number)
     });
 }; 
 
-const searchRelatedGames = async (res: any, client: Client, tagFilter: TagFilter, id: number): Promise<Game[] | any> => {
+const searchRelatedGames = async (client: Client, tagFilter: TagFilter, id: number): Promise<Game[] | any> => {
     return client.search(requestGamesByTags(tagFilter, id)).then(function(response) {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: Game[] = [];
@@ -278,8 +259,24 @@ const searchRelatedGames = async (res: any, client: Client, tagFilter: TagFilter
         });
         return formattedResults;
     }).catch(function (error) {
-        res.status(404).send({ message: "Not found" });
         return undefined;
     });
 };
+
+const computeRelatedGames = async (client: Client, tagFilter: TagFilter, id: number): Promise<Game[] | undefined> => {
+    let formattedResults: Game[] | any = await searchRelatedGames(client, tagFilter, id);
+
+    if (formattedResults && Object.keys(formattedResults).length !== 0) {
+        return formattedResults;
+    } else {
+        // retry but remove the last one of the top tags :)
+        formattedResults = await searchRelatedGames(client, { tags: tagFilter.tags.slice(0, 2) }, id);
+
+        if (formattedResults && Object.keys(formattedResults).length !== 0) {
+            return formattedResults;
+        } else {
+            return undefined;
+        }
+    }
+}
 
