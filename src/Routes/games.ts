@@ -74,26 +74,23 @@ export const getGameById = (req: any, res: any, client: Client) => {
 export const getRelatedGames = async (req: any, res: any, client: Client) => {
     const tagFilter: TagFilter = req.body;
     const id: number = req.params.id;
+    let firstTry: boolean = true;
 
-    const request = requestGamesByTags(tagFilter, id);
+    let formattedResults: Game[] | any = await searchRelatedGames(res, client, tagFilter, id);
+    console.log(formattedResults);
 
-    client.search(request).then(function(response) {
-        const results: {}[] = response.body.hits.hits;
-        let formattedResults: Game[] = [];
+    if (formattedResults && Object.keys(formattedResults).length !== 0) {
+        res.status(200).send(formattedResults);
+    } else {
+        // retry but remove the last one of the top tags :)
+        formattedResults = await searchRelatedGames(res, client, { tags: tagFilter.tags.slice(0, 2) }, id);
 
-        results.forEach((res: any) => {
-            const game: Game = parseIntoGameType(res._source);
-            formattedResults.push({ ...game, required_age: Number(game.required_age) });
-        });
-
-        if (Object.keys(formattedResults).length !== 0) {
+        if (formattedResults && Object.keys(formattedResults).length !== 0) {
             res.status(200).send(formattedResults);
         } else {
-            res.status(404).send("Not found");
+            res.status(404).send({ message: "Not found" });
         }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
-    });
+    }
 };
 
 export const getRecommendedGames = async (req: any, res: any, client: Client) => {
@@ -268,6 +265,22 @@ const searchGames = async (res: any, client: Client, request: any, page: number)
     }).catch(function (error) {
         console.log(error?.meta?.body?.error);
         res.status(404).send("Not found");
+    });
+}; 
+
+const searchRelatedGames = async (res: any, client: Client, tagFilter: TagFilter, id: number): Promise<Game[] | any> => {
+    return client.search(requestGamesByTags(tagFilter, id)).then(function(response) {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: Game[] = [];
+
+        results.forEach((res: any) => {
+            const game: Game = parseIntoGameType(res._source);
+            formattedResults.push({ ...game, required_age: Number(game.required_age) });
+        });
+        return formattedResults;
+    }).catch(function (error) {
+        res.status(404).send({ message: "Not found" });
+        return undefined;
     });
 }
 
