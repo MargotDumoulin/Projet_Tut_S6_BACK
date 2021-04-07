@@ -434,7 +434,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/tags?name=val&page=1",
+							"raw": "http://{{localhost}}/api/tags?name=action&page=1",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -446,7 +446,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "val"
+									"value": "action"
 								},
 								{
 									"key": "page",
