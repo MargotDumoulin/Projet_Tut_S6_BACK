@@ -26,7 +26,7 @@ app.listen( config.port, () => {
 app.post('/api/games', (req, res) => { getGames(req, res, client); });
 app.get('/api/games', (req, res) => { getGames(req, res, client); });
 app.post('/api/games/related/:id', (req, res) => { getRelatedGames(req, res, client); });
-app.post('/api/games/recommended', (req, res) => { getRecommendedGames(req, res, client); });
+app.get('/api/games/recommended', (req, res) => { getRecommendedGames(req, res, client); });
 app.get('/api/game/:id', (req, res) => { getGameById(req, res, client); });
 
 /* PUBLISHERS */

@@ -1,5 +1,5 @@
 import { Client } from '@elastic/elasticsearch';
-import { requestTagsByName, requestTags, requestTagsByValue } from '../Request/requestsTags';
+import { requestTagsByName, requestTags, requestTagByValue } from '../Request/requestsTags';
 
 // ------------- TAGS -------------------
 export const getTags = (req: any, res: any, client: Client) => {
@@ -11,7 +11,7 @@ export const getTags = (req: any, res: any, client: Client) => {
     if (name !== "") {
         request = requestTagsByName(page, name);
     } else if (value !== "") {
-        request = requestTagsByValue(value);
+        request = requestTagByValue(value);
     } else {
         request = requestTags(page);
     }

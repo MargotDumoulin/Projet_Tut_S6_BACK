@@ -491,7 +491,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{localhost}}/api/game/730",
+							"raw": "http://{{localhost}}/api/game/684580",
 							"protocol": "http",
 							"host": [
 								"{{localhost}}"
@@ -499,7 +499,7 @@
 							"path": [
 								"api",
 								"game",
-								"730"
+								"684580"
 							]
 						}
 					},
@@ -784,8 +784,11 @@
 				},
 				{
 					"name": "Get Recommended Games",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
@@ -793,6 +796,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://{{localhost}}/api/games/recommended",
 							"protocol": "http",
@@ -901,7 +908,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"boop@bip\",\n    \"password\": \"password\"\n}",
+							"raw": "{\n    \"email\": \"boop@bip.fr\",\n    \"password\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

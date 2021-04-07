@@ -8,6 +8,7 @@ import fs from 'fs';
 import { requestLibrary } from '../Request/requestsUsers';
 import { sortByOccurrences } from '../utils/ObjectUtils';
 import { countOccurrences } from '../utils/ArrayUtils';
+import { requestTagByValue } from '../Request/requestsTags';
 
 export const getGames = async (req: any, res: any, client: Client) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
@@ -91,13 +92,12 @@ export const getRelatedGames = async (req: any, res: any, client: Client) => {
             res.status(404).send("Not found");
         }
     }).catch(function (error) {
-        console.log(error?.meta?.body?.error);
         res.status(404).send("Not found");
     });
 };
 
 export const getRecommendedGames = async (req: any, res: any, client: Client) => {
-    const tagFilter: TagFilter = req.body;
+    // returns a max of 10 recommended games.
     const token: string = req?.headers?.authorization;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 
@@ -114,8 +114,13 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
 
                 if (results.length > 0) {
                     const latestIds: number[] = formattedResults[0].library.splice(0, 10);
+                    // For example: if we have ten games in the library, we'll get one recommended game per game (so we have 10 in total).
+                    // If we have only one game in the library, we'll try to get as much recommended game per game as possible, with a max of 10.
+                    // If we have two games in the library, we'll have a max of 5 recommended games per game, etc...
+                    const maxOfRecommendedGamesPerRelatedGame: number = Math.floor(10 / latestIds.length);
+                    console.log(maxOfRecommendedGamesPerRelatedGame);
 
-                    // Step 2: Now that we have the latest game ids added to the library, we need to get the games associated
+                    // Step 2: Now that we have the 10 latest game ids added to the library, we need to get the games associated
                     const games: Game[] = [];
                     for (let id of latestIds) {
                         await client.search(requestGameById(id)).then((response) => {
@@ -131,39 +136,69 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                                 games.push(game);
                             } 
                         }).catch((error) => {
-                            res.status(500).send("Internal Server Error");
+                            res.status(500).send({ message: "Internal Server Error" });
                         });
                     }
 
-                    // Step 3: Now that we have the latest games, let's inspect the tags and retrieve the most relevant ones !
-                    const tags = getMostRelevantTags(games);
+                    // Step 3: Now that we have the games, let's fetch the first two related games of each game
+                    const recommendedGames: Game[] = [];
+                    for (let game of games) {
+                        const tags: any[] = Object.entries(game)
+                            .filter(([key, val]) => key.includes('tag_') && val && val > 0)
+                            .sort(([keyA, valA]: any[], [keyB, valB]: any[]) => valB - valA)
+                            .slice(0, 3)
+                            .map(tag => tag[0]);
 
-                    // Step 4: (Finally!) Request the recommended games with the tags 
-                    client.search(requestGamesByTags({ tags: tags })).then((response) => {
-                        const results: {}[] = response.body.hits.hits;
-                        let formattedResults: Game[] = [];
-
-                        results.forEach((res: any) => {
-                            const game: Game = parseIntoGameType(res._source);
-                            formattedResults.push({ ...game, required_age: Number(game.required_age) });
-                        });
-
-                        if (Object.keys(formattedResults).length !== 0) {
-                            res.status(200).send(formattedResults);
-                        } else {
-                            res.status(404).send("Not found");
+                        // Step 4: Get the tags value of each game !
+                        const formattedTags: Tag[] = [];
+                        for (let tag of tags) {
+                            console.log(tag);
+                            await client.search(requestTagByValue(tag))
+                            .then((response) => {
+                                let formattedResult: Tag; 
+                                if (response.body.hits.hits[0] && response.body.hits.hits[0]._source) {
+                                    formattedResult = response.body.hits.hits[0]._source;
+                                    formattedTags.push(formattedResult);
+                                }
+                            })
+                            .catch((error) => { res.status(500).send({ message: "Internal Server Error" }); });
                         }
-                    }).catch(() => res.status(500).send('Internal Server Error'));
+
+                        // Step 5: With the tags, get related games of each game
+                        await client.search(requestGamesByTags({ tags: formattedTags.map((tag: Tag) => tag.name) }, game.id))
+                            .then((response) => {
+                                const results: any[] = response.body.hits.hits;
+                                const formattedResult: Game | {} = {};
+                            
+                                for (let i = 0; i < maxOfRecommendedGamesPerRelatedGame; i++) {
+                                    if (results && results[i] && results[i]._source) {
+                                        Object.assign(formattedResult, results[0]._source);
+                                        const relatedGame: Game = parseIntoGameType(formattedResult);
+
+                                        // We don't want any game appearing more than once 
+                                        if (!recommendedGames.find((game) => game.id !== relatedGame.id)) {
+                                            recommendedGames.push(relatedGame); 
+                                        }
+                                    }
+                                }
+                            })
+                            .catch((error) => { res.status(500).send({ message: "Internal Server Error" }); });
+                    }
+                    
+                    if (recommendedGames.length > 0) {
+                        res.status(200).send(recommendedGames);
+                    } else {
+                        res.status(404).send({ message: "Not found" });
+                    }
                 } else {
                     // No recommended games because we have nothing in the library !
-                    res.status(404).send('Not found');
+                    res.status(404).send({ message: "Not found" });
                 }
             }).catch((error) => {
-                console.log(error);
-                res.status(500).send('Internal Server Error');
+                res.status(500).send({ message: "Internal Server Error" });
             });
         } else {
-            res.status(403).send('Not allowed');
+            res.status(403).send({ message: "Not allowed" });
         }
     });
 };
