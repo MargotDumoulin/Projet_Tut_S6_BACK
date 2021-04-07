@@ -6,9 +6,6 @@ import config from '../config.json';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import { requestLibrary } from '../Request/requestsUsers';
-import { sortByOccurrences } from '../utils/ObjectUtils';
-import { countOccurrences } from '../utils/ArrayUtils';
-import { requestTagByValue } from '../Request/requestsTags';
 import { getTagsValues } from './tags';
 
 export const getGames = async (req: any, res: any, client: Client) => {
