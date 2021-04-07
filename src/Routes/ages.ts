@@ -9,13 +9,15 @@ export const getAges = (req: any, res: any, client: Client) => {
 
     client.search(request).then((response) => {
         const results: {}[] = response.body.hits.hits;
-        let formattedResults: Category[] = [];
+        let formattedResults: Age[] = [];
 
         results.forEach((res: any) => {
-            formattedResults.push(res._source);
-        })
+            const age: Age = { value: Number(res._source.age) };
+            formattedResults.push(age);
+        });
 
         if (Object.keys(formattedResults).length !== 0) {
+            formattedResults.sort((ageA: Age, ageB: Age) => ageA.value - ageB.value);
             res.status(200).send(formattedResults);
         } else {
             res.status(404).send({ message: "Not found" });

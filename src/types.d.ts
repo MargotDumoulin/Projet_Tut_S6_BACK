@@ -45,6 +45,10 @@ type Category = {
     name: string;
 }
 
+type Age = {
+    value: number;
+}
+
 type Platform = {
     name: string;
 }
