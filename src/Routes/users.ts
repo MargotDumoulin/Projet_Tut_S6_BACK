@@ -32,24 +32,24 @@ export const createUser = (req: any, res: any, client: Client) => {
                 hashedPassword = await argon2.hash(user.password);
             } catch (e) {
                 console.log(e);
-                res.status(500).send('Internal Server Error');
+                res.status(500).send({ message: "Internal Server Error" });
             }
             
             client.index({
                 index: "project_s6_users",
                 body: { ...user, password: hashedPassword }
             }).then(() => {
-                res.status(200).send('OK');
+                res.status(200).send({ message: "OK" });
             }).catch(() => {
-                res.status(500).send('Internal Server Error');
+                res.status(500).send({ message: "Internal Server Error" });
             });
         } else {
-            res.status(400).send('Bad Request');
+            res.status(400).send({ message: "Bad request" });
         }
         
-    }).catch(function (error) {
+    }).catch((error) => {
         console.log(error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send({ message: "Internal Server Error" });
     });
 };
 
@@ -59,7 +59,7 @@ export const getUsers = (req: any, res: any, client: Client) => {
     
     request = requestUsers(page);
 
-    client.search(request).then(function(response) {
+    client.search(request).then((response) => {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: User[] = [];
 
@@ -70,10 +70,10 @@ export const getUsers = (req: any, res: any, client: Client) => {
         if (Object.keys(formattedResults).length !== 0) {
             res.status(200).send(formattedResults);
         } else {
-            res.status(404).send('Not found');
+            res.status(404).send({ message: "Not Found" });
         }
-    }).catch(function (error) {
-        res.status(500).send('Internal Server Error');
+    }).catch((error) => {
+        res.status(500).send({ message: "Internal Server Error" });
     });
 };
 
@@ -108,19 +108,19 @@ export const addToLibrary = (req: any, res: any, client: Client) => {
                             }
                         }
                     })
-                    .then(() => { res.status(200).send({ status: 'OK' })})
+                    .then(() => { res.status(200).send({ message: 'OK' })})
                     .catch((error) => { 
                         console.log(error); 
-                        res.status(500).send('Internal Server Error'); })
+                        res.status(500).send({ message: "Internal Server Error" }); })
                     
                 } else {
                     // The email is not valid (user does not exist)
-                    res.status(403).send('Not allowed');
+                    res.status(403).send({ message: "Not Allowed" });
                 }
             })
-            .catch(() => { res.status(500).send('Internal Server Error'); })
+            .catch(() => { res.status(500).send({ message: "Internal Server Error" }); })
         } else {
-            res.status(403).send('Not allowed');
+            res.status(403).send({ message: "Not Allowed" });
         }
     });
 };
@@ -150,19 +150,19 @@ export const removeFromLibrary = (req: any, res: any, client: Client) => {
                             }
                         }
                     })
-                    .then(() => { res.status(200).send({ status: 'OK' })})
+                    .then(() => { res.status(200).send({ message: 'OK' })})
                     .catch((error) => { 
                         console.log(error); 
-                        res.status(500).send('Internal Server Error'); })
+                        res.status(500).send({ message: "Internal Server Error" }); })
                     
                 } else {
                     // The email is not valid (user does not exist)
-                    res.status(403).send('Not allowed');
+                    res.status(403).send({ message: "Not Allowed" });
                 }
             })
-            .catch(() => { res.status(500).send('Internal Server Error'); })
+            .catch(() => { res.status(500).send({ message: "Internal Server Error" }); })
         } else {
-            res.status(403).send('Not allowed');
+            res.status(403).send({ message: "Not Allowed" });
         }
     });
 };
@@ -188,10 +188,10 @@ export const isInLibrary = (req: any, res: any, client: Client) => {
                     res.status(200).send({ isInLibrary: false });
                 }  
             }).catch((error) => {
-                res.status(500).send('Internal Server Error');
+                res.status(500).send({ message: "Internal Server Error" });
             });
         } else {
-            res.status(403).send('Not allowed');
+            res.status(403).send({ message: "Not Allowed" });
         }
     });   
 }
@@ -215,15 +215,13 @@ export const getLibrary = (req: any, res: any, client: Client) => {
                 if (Object.keys(formattedResults).length !== 0) {
                     res.status(200).send(formattedResults[0]);
                 } else {
-                    res.status(404).send('Not found');
+                    res.status(404).send({ message: "Not Found" });
                 }
             }).catch((error) => {
-                console.log(error);
-                console.log(error.meta.body.error);
-                res.status(500).send('Internal Server Error');
+                res.status(500).send({ message: "Internal Server Error" });
             });
         } else {
-            res.status(403).send('Not allowed');
+            res.status(403).send({ message: "Not Allowed" });
         }
     });
 };
@@ -235,13 +233,13 @@ export const isTokenValid = (req: any, res: any) => {
     if (token) {
         jwt.verify(token, publicKey, (error: any, decoded: any) => {
             if (decoded && decoded.email) {
-                res.status(200).send('OK');
+                res.status(200).send({ message: "OK" });
             } else {
-                res.status(403).send('Not allowed');
+                res.status(403).send({ message: "Not Allowed" });
             }
         })
     } else {
-        res.status(403).send('Not allowed');
+        res.status(403).send({ message: "Not allowed" });
     }
 };
 
@@ -257,13 +255,12 @@ export const isEmailTaken = (req: any, res: any, client: Client) => {
             const results: [] = response.body.hits.hits;
             
             if (results.length > 0) {
-                res.status(409).send('Email already exists.');
+                res.status(409).send({ message: "Email already exists" });
             } else {
-                res.status(200).send('Email does not exist yet.');
+                res.status(200).send({ message: "Email does not exists yet" });
             }
-        }).catch(function (error) {
-            console.log(error);
-            res.status(500).send('Internal Server Error');
+        }).catch((error) => {
+            res.status(500).send({ message: "Internal Server Error" });
         });
     }
 };
@@ -285,17 +282,16 @@ export const isLoginInfoCorrect = (req: any, res: any, client: Client) => {
                     const token = jwt.sign({ email }, privateKey, { algorithm: 'RS256' });
                     res.status(200).send({ token });
                 } else {
-                    res.status(403).send('Not allowed');
+                    res.status(403).send({ message: "Not Allowed" });
                 }
             } else {
-                res.status(403).send('Not allowed');
+                res.status(403).send({ message: "Not Allowed" });
             }
-        }).catch(function (error) {
-            console.log(error);
-            res.status(500).send('Internal Server Error');
+        }).catch((error) => {
+            res.status(500).send({ message: "Internal Server Error" });
         });
     } else {
-        res.status(400).send('Bad Request');
+        res.status(400).send({ message: "Bad Request" });
     }
 };
 
