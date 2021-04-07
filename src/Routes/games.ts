@@ -9,6 +9,7 @@ import { requestLibrary } from '../Request/requestsUsers';
 import { sortByOccurrences } from '../utils/ObjectUtils';
 import { countOccurrences } from '../utils/ArrayUtils';
 import { requestTagByValue } from '../Request/requestsTags';
+import { getTagsValues } from './tags';
 
 export const getGames = async (req: any, res: any, client: Client) => {
     const page: number = req.query.page > 0 ? req.query.page : '1';
@@ -84,16 +85,13 @@ export const getRelatedGames = async (req: any, res: any, client: Client) => {
     }
 };
 
+// returns a max of 10 recommended games.
 export const getRecommendedGames = async (req: any, res: any, client: Client) => {
-    // returns a max of 10 recommended games.
     const token: string = req?.headers?.authorization;
     const publicKey = fs.readFileSync('config/keys/public.pem');
 
-    // Step 1: Decode token, get user's library to get the 10 last game id's registered
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
         if (decoded && decoded.email) {
-
-            // The token is valid, let's search for the users already existing library
             client.search(requestLibrary(decoded.email)).then(async (response) => {
                 const results: {}[] = response.body.hits.hits;
                 let formattedResults: any[] = [];
@@ -103,55 +101,19 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                 if (results.length > 0) {
                     const library: number[] = formattedResults[0].library;
                     const latestIds: number[] = library.slice(Math.max(library.length - 10, 0));
-                    // For example: if we have ten games in the library, we'll get one recommended game per game (so we have 10 in total).
-                    // If we have only one game in the library, we'll try to get as much recommended game per game as possible, with a max of 10.
-                    // If we have two games in the library, we'll have a max of 5 recommended games per game, etc...
                     const maxOfRecommendedGamesPerRelatedGame: number = Math.floor(10 / latestIds.length);
 
-                    // Step 2: Now that we have the 10 latest game ids added to the library, we need to get the games associated
-                    const games: Game[] = [];
-                    for (let id of latestIds) {
-                        await client.search(requestGameById(id)).then((response) => {
-                            const results: [] = response.body.hits.hits;
-                            const formattedResult: Game | {} = {};
-                            
-                            results.forEach((res: any) => {
-                                Object.assign(formattedResult, res._source);
-                            });
-                    
-                            if (Object.keys(formattedResult).length !== 0) {
-                                const game: Game = parseIntoGameType(formattedResult);
-                                games.push(game);
-                            } 
-                        }).catch((error) => {
-                            res.status(500).send({ message: "Internal Server Error" });
-                        });
-                    }
+                    // Step 1: Now that we have the 10 latest game ids added to the library, we need to get the games associated
+                    const games: Game[] = await computeGamesByIds(res, client, latestIds);
 
-                    // Step 3: Now that we have the games, let's fetch the related games of each game
                     let recommendedGames: Game[] = [];
                     for (let game of games) {
-                        const tags: any[] = Object.entries(game)
-                            .filter(([key, val]) => key.includes('tag_') && val && val > 0)
-                            .sort(([keyA, valA]: any[], [keyB, valB]: any[]) => valB - valA)
-                            .slice(0, 3)
-                            .map(tag => tag[0]);
+                        const tags: string[] = retrieveRelevantTags(game);
 
-                        // Step 4: Get the tags value of each game !
-                        const formattedTags: Tag[] = [];
-                        for (let tag of tags) {
-                            await client.search(requestTagByValue(tag))
-                            .then((response) => {
-                                let formattedResult: Tag; 
-                                if (response.body.hits.hits[0] && response.body.hits.hits[0]._source) {
-                                    formattedResult = response.body.hits.hits[0]._source;
-                                    formattedTags.push(formattedResult);
-                                }
-                            })
-                            .catch((error) => { res.status(500).send({ message: "Internal Server Error" }); });
-                        }
+                        // Step 2: Get the tags value of each game !
+                        const formattedTags = await getTagsValues(res, client, tags);
 
-                        // Step 5: With the tags, get related games of each game
+                        // Step 3: With the tags, get related games of each game
                         const relatedGames: Game[] | undefined = await computeRelatedGames(client, { tags: formattedTags.map((tag: Tag) => tag.name) }, game.id);
                         const intermediateRecommended: Game[] = [];
                         relatedGames?.forEach((relatedGame: Game) => {
@@ -278,5 +240,35 @@ const computeRelatedGames = async (client: Client, tagFilter: TagFilter, id: num
             return undefined;
         }
     }
+};
+
+const computeGamesByIds = async (res: any, client: Client, ids: number[]): Promise<Game[]> => {
+    const games: Game[] = [];
+    for (let id of ids) {
+        await client.search(requestGameById(id)).then((response) => {
+            const results: [] = response.body.hits.hits;
+            const formattedResult: Game | {} = {};
+            
+            results.forEach((res: any) => {
+                Object.assign(formattedResult, res._source);
+            });
+    
+            if (Object.keys(formattedResult).length !== 0) {
+                const game: Game = parseIntoGameType(formattedResult);
+                games.push(game);
+            } 
+        }).catch((error) => {
+            res.status(500).send({ message: "Internal Server Error" });
+        });
+    }
+    return games;
+};
+
+const retrieveRelevantTags = (game: Game): string[] => {
+    return Object.entries(game)
+        .filter(([key, val]) => key.includes('tag_') && val && val > 0)
+        .sort(([keyA, valA]: any[], [keyB, valB]: any[]) => valB - valA)
+        .slice(0, 3)
+        .map(tag => tag[0]);
 }
 
