@@ -1,5 +1,5 @@
 import { Client } from '@elastic/elasticsearch';
-import { requestTagsByName, requestTags, requestTagsByValue } from '../Request/requestsTags';
+import { requestTagsByName, requestTags, requestTagByValue } from '../Request/requestsTags';
 
 // ------------- TAGS -------------------
 export const getTags = (req: any, res: any, client: Client) => {
@@ -11,7 +11,7 @@ export const getTags = (req: any, res: any, client: Client) => {
     if (name !== "") {
         request = requestTagsByName(page, name);
     } else if (value !== "") {
-        request = requestTagsByValue(value);
+        request = requestTagByValue(value);
     } else {
         request = requestTags(page);
     }
@@ -48,3 +48,19 @@ export const getTags = (req: any, res: any, client: Client) => {
         res.status(404).send("Not found");
     });
 };
+
+export const getTagsValues = async (res: any, client: Client, tags: string[]): Promise<FullTag[]> => {
+    const formattedTags: FullTag[] = [];
+    for (let tag of tags) {
+        await client.search(requestTagByValue(tag))
+        .then((response) => {
+            if (response.body.hits.hits[0] && response.body.hits.hits[0]._source) {
+                formattedTags.push(response.body.hits.hits[0]._source as FullTag);
+            }
+        })
+        .catch((error) => { 
+            res.status(500).send({ message: "Internal Server Error" }); 
+        });
+    }
+    return formattedTags;
+}

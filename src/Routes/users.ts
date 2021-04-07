@@ -206,7 +206,7 @@ export const getLibrary = (req: any, res: any, client: Client) => {
             // The token is valid, let's search for the users already existing library
             client.search(request).then((response) => {
                 const results: {}[] = response.body.hits.hits;
-                let formattedResults: Game[] = [];
+                let formattedResults: number[] = [];
 
                 results.forEach((res: any) => {
                     formattedResults.push(res._source);
