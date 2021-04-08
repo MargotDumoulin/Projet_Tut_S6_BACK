@@ -12,7 +12,7 @@ export const getDevelopers = (req: any, res: any, client: Client) => {
         request = requestDevelopers(page);
     }
 
-    client.search(request).then(function(response) {
+    client.search(request).then((response) => {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: Developer[] = [];
 
@@ -23,9 +23,9 @@ export const getDevelopers = (req: any, res: any, client: Client) => {
         if (Object.keys(formattedResults).length !== 0) {
             res.status(200).send(formattedResults);
         } else {
-            res.status(404).send("Not found");
+            res.status(404).send({ message: "Not found" });
         }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
+    }).catch((error) => {
+        res.status(404).send({ message: "Not found" });
     });
 };

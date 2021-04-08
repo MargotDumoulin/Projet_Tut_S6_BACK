@@ -35,10 +35,10 @@ export const getGames = async (req: any, res: any, client: Client) => {
                         filters.library = lib.library;
                         searchGames(res, client, requestGames(page, filters), page);
                     }).catch((error) => {
-                        res.status(500).send("Internal Server Error");
+                        res.status(500).send({ message: "Internal Server Error" });
                     });
                 } else {
-                    res.status(403).send("Not allowed");
+                    res.status(403).send({ message: "Not allowed" });
                 }
             });
         } else {
@@ -50,7 +50,7 @@ export const getGames = async (req: any, res: any, client: Client) => {
 export const getGameById = (req: any, res: any, client: Client) => {
     const id: number = req.params.id;
 
-    client.search(requestGameById(id)).then(function(response) {
+    client.search(requestGameById(id)).then((response) => {
         const results: [] = response.body.hits.hits;
         const formattedResult: Game | {} = {};
         
@@ -62,10 +62,10 @@ export const getGameById = (req: any, res: any, client: Client) => {
             const game: Game = parseIntoGameType(formattedResult);
             res.status(200).send({ ...game, required_age: Number(game.required_age) });
         } else {
-            res.status(404).send("Not found");
+            res.status(404).send({ message: "Not found" });
         }
-    }).catch(function (error) {
-        res.status(404).send("Not found");
+    }).catch((error) => {
+        res.status(404).send({ message: "Not found" });
     });
 }
 
@@ -187,7 +187,7 @@ const searchGames = async (res: any, client: Client, request: any, page: number)
     const numberOfResults = await countNumberOfResults(request);
     const numberOfPages = numberOfResults > 10 ? Math.round(numberOfResults / 10) : 1;
 
-    client.search(request).then(function(response) {
+    client.search(request).then((response) => {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: Game[] = [];
 
@@ -199,16 +199,16 @@ const searchGames = async (res: any, client: Client, request: any, page: number)
         if (Object.keys(formattedResults).length !== 0) {
             res.status(200).send({ games: formattedResults, numberOfPages, currentPage: page });
         } else {
-            res.status(404).send("Not found");
+            res.status(404).send({ message: "Not found" });
         }
-    }).catch(function (error) {
+    }).catch((error) => {
         console.log(error?.meta?.body?.error);
-        res.status(404).send("Not found");
+        res.status(404).send({ message: "Not found" });
     });
 }; 
 
 const searchRelatedGames = async (client: Client, tagFilter: TagFilter, id: number): Promise<Game[] | any> => {
-    return client.search(requestGamesByTags(tagFilter, id)).then(function(response) {
+    return client.search(requestGamesByTags(tagFilter, id)).then((response) => {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: Game[] = [];
 
@@ -217,7 +217,7 @@ const searchRelatedGames = async (client: Client, tagFilter: TagFilter, id: numb
             formattedResults.push({ ...game, required_age: Number(game.required_age) });
         });
         return formattedResults;
-    }).catch(function (error) {
+    }).catch((error) => {
         return undefined;
     });
 };
