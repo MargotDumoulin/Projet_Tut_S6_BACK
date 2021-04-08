@@ -113,8 +113,10 @@ export const getRecommendedGames = async (req: any, res: any, client: Client) =>
                         // Step 3: With the tags, get related games of each game
                         const relatedGames: Game[] | undefined = await computeRelatedGames(client, { tags: formattedTags.map((tag: Tag) => tag.name) }, game.id);
                         const intermediateRecommended: Game[] = [];
+                        // Test if not already present in array + not already present in library :)
                         relatedGames?.forEach((relatedGame: Game) => {
-                            if (!recommendedGames.find((recommendedGame: Game) => recommendedGame.id === relatedGame.id)) {
+                            if ((!recommendedGames.find((recommendedGame: Game) => recommendedGame.id === relatedGame.id))
+                                && (!latestIds.find((gameId: number) => relatedGame.id === gameId))) {
                                 intermediateRecommended.push(relatedGame);
                             }
                         });
