@@ -208,7 +208,7 @@ const searchGames = async (res: any, client: Client, request: any, page: number)
 }; 
 
 const searchRelatedGames = async (client: Client, tagFilter: TagFilter, id: number): Promise<Game[] | any> => {
-    return client.search(requestGamesByTags(tagFilter, id)).then(function(response) {
+    return client.search(requestGamesByTags(tagFilter, id)).then((response) => {
         const results: {}[] = response.body.hits.hits;
         let formattedResults: Game[] = [];
 

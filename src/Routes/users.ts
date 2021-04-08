@@ -177,7 +177,7 @@ export const isInLibrary = (req: any, res: any, client: Client) => {
     jwt.verify(token, publicKey, (error: any, decoded: any) => {
         if (decoded && decoded.email) {
             const request = requestLibrary(decoded.email);
-            client.search(request).then(function(response) {
+            client.search(request).then((response) => {
                 const results: any[] = response.body.hits.hits;
 
                 if (results && results[0]._source && results[0]._source.library) {
@@ -249,7 +249,7 @@ export const isEmailTaken = (req: any, res: any, client: Client) => {
     const email: string = req?.query?.email ? req.query.email : undefined;
 
     if (!email || email.length <= 0 || email === '""') { 
-        res.status(400).send('Bad Request'); 
+        res.status(400).send({ message: "Bad Request" }); 
     } else {
         client.search(
             requestUser(email)
@@ -259,7 +259,7 @@ export const isEmailTaken = (req: any, res: any, client: Client) => {
             if (results.length > 0) {
                 res.status(409).send({ message: "Email already exists" });
             } else {
-                res.status(200).send({ message: "Email does not exists yet" });
+                res.status(200).send({ message: "Email does not exist yet" });
             }
         }).catch((error) => {
             res.status(500).send({ message: "Internal Server Error" });
