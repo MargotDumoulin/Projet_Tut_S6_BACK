@@ -95,7 +95,14 @@ export const requestGames = (page: number, filters: Filters) => {
                     name: { "order" : filters.sort.isASC ? "asc" : "desc" }
                 }] : []),
                 ...((filters.sort && filters.sort.sortBy === 'required_age') ? [{
-                    required_age: { "order" : filters.sort.isASC ? "asc" : "desc" }
+                    "_script": {
+                        type: "number",
+                        script: {
+                            lang: "painless",
+                            source: `Integer.parseInt(doc['required_age'].value)`,
+                        },
+                        order: filters.sort.isASC ? "asc" : "desc"
+                    }
                 }] : []),
                 ...((filters.sort && filters.sort.sortBy === 'positive_reviews') ? [{
                     "_script": {
