@@ -1,0 +1,28 @@
+import { Client } from "@elastic/elasticsearch";
+import { requestAges } from "../Request/requestsAges";
+
+export const getAges = (req: any, res: any, client: Client) => {
+    const page: number = req.query.page > 0 ? req.query.page : '1';
+    let request: {} = {};
+    
+    request = requestAges(page);
+
+    client.search(request).then((response) => {
+        const results: {}[] = response.body.hits.hits;
+        let formattedResults: Age[] = [];
+
+        results.forEach((res: any) => {
+            const age: Age = { value: Number(res._source.age) };
+            formattedResults.push(age);
+        });
+
+        if (Object.keys(formattedResults).length !== 0) {
+            formattedResults.sort((ageA: Age, ageB: Age) => ageA.value - ageB.value);
+            res.status(200).send(formattedResults);
+        } else {
+            res.status(404).send({ message: "Not found" });
+        }
+    }).catch((error) => {
+        res.status(404).send({ message: "Not found" });
+    });
+};
